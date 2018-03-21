@@ -74,6 +74,48 @@ logging.basicConfig(filename='style.log', level=logging.DEBUG)
 '''
 
 def action(e, doc):
+    if (isinstance(e, pf.Span)) and ((doc.format == "latex") or (doc.format == "beamer")):
+        beforeTeX = ""
+        afterTeX = ""
+ 
+        if 'Large' in e.classes:
+            beforeTeX = beforeTeX+"{\\Large "
+            afterTeX = "}"+afterTeX
+
+        if 'LARGE' in e.classes:
+            beforeTeX = beforeTeX+"{\\LARGE "
+            afterTeX = "}"+afterTeX
+            
+        if 'huge' in e.classes:
+            beforeTeX = beforeTeX+"{\\huge "
+            afterTeX = "}"+afterTeX
+            
+        if 'normalsize' in e.classes:
+            beforeTeX = beforeTeX+"{\\normalsize "
+            afterTeX = "}"+afterTeX
+
+        if 'small' in e.classes:
+            beforeTeX = beforeTeX+"{\\small "
+            afterTeX = "}"+afterTeX
+            
+        if 'footnotesize' in e.classes:
+            beforeTeX = beforeTeX+"{\\footnotesize "
+            afterTeX = "}"+afterTeX
+
+        if 'scriptsize' in e.classes:
+            beforeTeX = beforeTeX+"{\\scriptsize "
+            afterTeX = "}"+afterTeX
+            
+        if 'tiny' in e.classes:
+            beforeTeX = beforeTeX+"{\\tiny "
+            afterTeX = "}"+afterTeX
+         
+        if beforeTeX != "":
+            before = pf.RawInline(beforeTeX, format="latex")
+            after = pf.RawInline(afterTeX, format="latex")
+            e.content = [before] + list(e.content) + [after]
+            return e
+       
     if (isinstance(e, pf.Div)) and ((doc.format == "latex") or (doc.format == "beamer")):
         beforeTeX = ""
         afterTeX = ""

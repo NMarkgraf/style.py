@@ -39,3 +39,7 @@ Das ist GROSS!
 :::
 
 Das ist normaler Text!
+
+## Nun Spans statt Divs
+
+Das ist [ein kleiner]{.small} [GROSSER]{.Large} Test!
