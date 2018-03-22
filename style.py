@@ -66,101 +66,76 @@ TEX_CENTER_AFTER = """\\end{center}\n"""
 '''
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
 '''
-#logging.basicConfig(filename='style.log', level=logging.ERROR)
-logging.basicConfig(filename='style.log', level=logging.DEBUG)
+logging.basicConfig(filename='style.log', level=logging.ERROR)
+#logging.basicConfig(filename='style.log', level=logging.DEBUG)
 
 '''
+
 \tiny, \scriptsize, \footnotesize, \small, \normalsize (default), \large, \Large, \LARGE, \huge and \Huge. 
 '''
 
 def action(e, doc):
-    if (isinstance(e, pf.Span)) and ((doc.format == "latex") or (doc.format == "beamer")):
-        beforeTeX = ""
-        afterTeX = ""
- 
-        if 'Large' in e.classes:
-            beforeTeX = beforeTeX+"{\\Large "
-            afterTeX = "}"+afterTeX
 
-        if 'LARGE' in e.classes:
-            beforeTeX = beforeTeX+"{\\LARGE "
-            afterTeX = "}"+afterTeX
-            
-        if 'huge' in e.classes:
-            beforeTeX = beforeTeX+"{\\huge "
-            afterTeX = "}"+afterTeX
-            
-        if 'normalsize' in e.classes:
-            beforeTeX = beforeTeX+"{\\normalsize "
-            afterTeX = "}"+afterTeX
+    if isinstance(e, pf.Span) or isinstance(e, pf.Div):
+        
+        if (doc.format in ["latex", "beamer"]):
 
-        if 'small' in e.classes:
-            beforeTeX = beforeTeX+"{\\small "
-            afterTeX = "}"+afterTeX
+            beforeTeX = ""
+            afterTeX = ""
+    
+            if 'center' in e.classes:
+                logging.debug("Adding center enviroment")
+                beforeTeX = beforeTeX+TEX_CENTER_BEFORE
+                afterTeX =  TEX_CENTER_AFTER+afterTeX
+     
+            if 'Large' in e.classes:
+                logging.debug("Adding Large")
+                beforeTeX = beforeTeX+"{\\Large "
+                afterTeX = "}"+afterTeX
+    
+            if 'LARGE' in e.classes:
+                logging.debug("Adding LARGE")
+                beforeTeX = beforeTeX+"{\\LARGE "
+                afterTeX = "}"+afterTeX
+                
+            if 'huge' in e.classes:
+                logging.debug("Adding huge")
+                beforeTeX = beforeTeX+"{\\huge "
+                afterTeX = "}"+afterTeX
+                
+            if 'normalsize' in e.classes:
+                beforeTeX = beforeTeX+"{\\normalsize "
+                afterTeX = "}"+afterTeX
+    
+            if 'small' in e.classes:
+                beforeTeX = beforeTeX+"{\\small "
+                afterTeX = "}"+afterTeX
+                
+            if 'footnotesize' in e.classes:
+                beforeTeX = beforeTeX+"{\\footnotesize "
+                afterTeX = "}"+afterTeX
+    
+            if 'scriptsize' in e.classes:
+                beforeTeX = beforeTeX+"{\\scriptsize "
+                afterTeX = "}"+afterTeX
+                
+            if 'tiny' in e.classes:
+                beforeTeX = beforeTeX+"{\\tiny "
+                afterTeX = "}"+afterTeX
             
-        if 'footnotesize' in e.classes:
-            beforeTeX = beforeTeX+"{\\footnotesize "
-            afterTeX = "}"+afterTeX
+            if isinstance(e, pf.Div):
+                before = pf.RawBlock(beforeTeX, format="latex")
+                after = pf.RawBlock(afterTeX, format="latex")
 
-        if 'scriptsize' in e.classes:
-            beforeTeX = beforeTeX+"{\\scriptsize "
-            afterTeX = "}"+afterTeX
-            
-        if 'tiny' in e.classes:
-            beforeTeX = beforeTeX+"{\\tiny "
-            afterTeX = "}"+afterTeX
-         
-        if beforeTeX != "":
-            before = pf.RawInline(beforeTeX, format="latex")
-            after = pf.RawInline(afterTeX, format="latex")
-            e.content = [before] + list(e.content) + [after]
-            return e
+            if isinstance(e, pf.Span):   
+                before = pf.RawInline(beforeTeX, format="latex")
+                after = pf.RawInline(afterTeX, format="latex")
+
+            if beforeTeX != "":
+                    e.content = [before] + list(e.content) + [after]
+                    return e
        
-    if (isinstance(e, pf.Div)) and ((doc.format == "latex") or (doc.format == "beamer")):
-        beforeTeX = ""
-        afterTeX = ""
-        if 'center' in e.classes:
-            beforeTeX = beforeTeX+TEX_CENTER_BEFORE
-            afterTeX =  TEX_CENTER_AFTER+afterTeX
 
-        if 'Large' in e.classes:
-            beforeTeX = beforeTeX+"{\\Large"
-            afterTeX = "}"+afterTeX
-
-        if 'LARGE' in e.classes:
-            beforeTeX = beforeTeX+"{\\LARGE"
-            afterTeX = "}"+afterTeX
-            
-        if 'huge' in e.classes:
-            beforeTeX = beforeTeX+"{\\huge"
-            afterTeX = "}"+afterTeX
-            
-        if 'normalsize' in e.classes:
-            beforeTeX = beforeTeX+"{\\normalsize"
-            afterTeX = "}"+afterTeX
-
-        if 'small' in e.classes:
-            beforeTeX = beforeTeX+"{\\small"
-            afterTeX = "}"+afterTeX
-            
-        if 'footnotesize' in e.classes:
-            beforeTeX = beforeTeX+"{\\footnotesize"
-            afterTeX = "}"+afterTeX
-
-        if 'scriptsize' in e.classes:
-            beforeTeX = beforeTeX+"{\\scriptsize"
-            afterTeX = "}"+afterTeX
-            
-        if 'tiny' in e.classes:
-            beforeTeX = beforeTeX+"{\\tiny"
-            afterTeX = "}"+afterTeX
-         
-        if beforeTeX != "":
-            before = pf.RawBlock(beforeTeX, format="latex")
-            after = pf.RawBlock(afterTeX, format="latex")
-            e.content = [before] + list(e.content) + [after]
-            return e
-            
 def main():
     logging.debug("Start style.py")
     pf.toJSONFilter(action=action)
