@@ -3,9 +3,12 @@ title: "Ein kleiner Test"
 author: "Norman Markgraf"
 date: "18 Dezember 2017"
 output:
-  html_document:
+  ioslides_presentation: 
+    slide_level: 2
     css: ../css/style-py.css
-  ioslides_presentation: default
+  slidy_presentation: 
+    slide_level: 2
+    css: ../css/style-py.css
   beamer_presentation:
     includes:
       in_header: header.tex
@@ -15,7 +18,8 @@ output:
     - --filter
     - ../style.py
     slide_level: 2
-  slidy_presentation: default
+  html_document:
+    css: ../css/style-py.css
 ---
 
 # Test

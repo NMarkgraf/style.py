@@ -44,3 +44,17 @@
 .Huge {
     font-size: 150%;
 }
+
+.Sinnspruch {
+    font-size: 60%;
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    line-height: 60%;
+}
+
+.Quelle {
+    padding-top: 0.7em;
+    font-size: 80%;    
+}
