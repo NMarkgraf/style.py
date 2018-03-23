@@ -122,6 +122,14 @@ def action(e, doc):
             if 'tiny' in e.classes:
                 beforeTeX = beforeTeX+"{\\tiny "
                 afterTeX = "}"+afterTeX
+                
+            if 'Quelle' in e.classes:
+                beforeTeX = beforeTeX+"{\\scriptsize "
+                afterTeX = "}"+afterTeX
+            
+            if 'Sinnspruch' in e.classes:
+                beforeTeX = beforeTeX+"\n\\mode<all>\\begin{quote}\\small "
+                afterTeX = "\\end{quote}\n\mode<*>"+afterTeX
             
             if isinstance(e, pf.Div):
                 before = pf.RawBlock(beforeTeX, format="latex")
@@ -132,9 +140,8 @@ def action(e, doc):
                 after = pf.RawInline(afterTeX, format="latex")
 
             if beforeTeX != "":
-                    e.content = [before] + list(e.content) + [after]
-                    return e
-       
+                e.content = [before] + list(e.content) + [after]
+                return e
 
 def main():
     logging.debug("Start style.py")

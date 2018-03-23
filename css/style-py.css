@@ -1,0 +1,46 @@
+/*
+  \tiny, \scriptsize, \footnotesize, \small, \normalsize (default), \large, \Large, \LARGE, \huge and \Huge.
+*/
+.center {
+    text-align:center;
+}
+
+.tiny{
+    font-size: 50%;
+}
+
+.scriptsize {
+    font-size: 60%;
+}
+
+.footnotesize {
+    font-size: 70%;
+}
+
+.small {
+    font-size: 80%;
+}
+
+.normalsize {
+    font-size: 100%;
+}
+
+.large {
+    font-size: 110%;
+}
+
+.Large {
+    font-size: 120%;
+}
+
+.LARGE {
+    font-size: 130%;
+}
+
+.huge {
+    font-size: 140%;
+}
+
+.Huge {
+    font-size: 150%;
+}
