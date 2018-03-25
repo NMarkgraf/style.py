@@ -159,7 +159,6 @@ def handleHeaderLevelOne(e, doc):
 
 
 def action(e, doc):
-
     if isinstance(e, pf.Header) and (e.level == 1):
         return handleHeaderLevelOne(e, doc)
 
