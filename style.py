@@ -79,7 +79,7 @@ FONTSIZECLASSES = ("tiny", "scriptsize", "footnotesize", "small",
 '''
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
 '''
-#logging.basicConfig(filename='style.log', level=logging.ERROR)
+# logging.basicConfig(filename='style.log', level=logging.ERROR)
 logging.basicConfig(filename='style.log', level=logging.DEBUG)
 
 '''
@@ -118,34 +118,38 @@ def handleCenterClass(prepost):
 '''
  Handle DIV and SPAN Blocks
 '''
+def handleDivAndSpanLaTeX(e, doc, prepost):
+    if 'center' in e.classes:
+        prepost = handleCenterClass(prepost)
+        
+    for fontsize in FONTSIZECLASSES:
+        if fontsize in e.classes:
+            prepost = handleFontSize(fontsize, prepost)
+
+    if 'Quelle' in e.classes:
+        prepost = addToPrePost(prepost, "{\\scriptsize ", "}")
+
+    if 'Sinnspruch' in e.classes:
+        prepost = addToPrePost(prepost, 
+            "\n\\mode<all>\\begin{quote}\\small ", 
+            "\\end{quote}\n\\mode<*>")
+    return prepost
+
+
 def handleDivAndSpan(e, doc):
     if (doc.format in ["latex", "beamer"]):
-        prepost = ("", "")
-
-        if 'center' in e.classes:
-            prepost = handleCenterClass(prepost)
-            
-        for fontsize in FONTSIZECLASSES:
-            if fontsize in e.classes:
-                prepost = handleFontSize(fontsize, prepost)
-
-        if 'Quelle' in e.classes:
-            prepost = addToPrePost(prepost, "{\\scriptsize ", "}")
-
-        if 'Sinnspruch' in e.classes:
-            prepost = addToPrePost(prepost, 
-                "\n\\mode<all>\\begin{quote}\\small ", 
-                "\\end{quote}\n\\mode<*>")
-
-        if isinstance(e, pf.Div):
-            before = pf.RawBlock(prepost[PRE], format="latex")
-            after = pf.RawBlock(prepost[POST], format="latex")
-
-        if isinstance(e, pf.Span):
-            before = pf.RawInline(prepost[PRE], format="latex")
-            after = pf.RawInline(prepost[POST], format="latex")
-
+        prepost = handleDivAndSpanLaTeX(e, doc, ("", ""))
+        
         if prepost != ("", ""):
+            
+            if isinstance(e, pf.Div):
+                before = pf.RawBlock(prepost[PRE], format="latex")
+                after = pf.RawBlock(prepost[POST], format="latex")
+
+            if isinstance(e, pf.Span):
+                before = pf.RawInline(prepost[PRE], format="latex")
+                after = pf.RawInline(prepost[POST], format="latex")
+
             e.content = [before] + list(e.content) + [after]
             return e
 
