@@ -115,10 +115,11 @@ def handleCenterClass(prepost):
     logging.debug("Adding center enviroment")
     return addToPrePost(prepost, TEX_CENTER_BEFORE, TEX_CENTER_AFTER)
 
+
 '''
  Handle DIV and SPAN Blocks
 '''
-def handleDivAndSpanLaTeX(e, doc, prepost):
+def handleDivAndSpanLaTeX(e, prepost):
     if 'center' in e.classes:
         prepost = handleCenterClass(prepost)
         
@@ -138,7 +139,7 @@ def handleDivAndSpanLaTeX(e, doc, prepost):
 
 def handleDivAndSpan(e, doc):
     if (doc.format in ["latex", "beamer"]):
-        prepost = handleDivAndSpanLaTeX(e, doc, ("", ""))
+        prepost = handleDivAndSpanLaTeX(e, ("", ""))
         
         if prepost != ("", ""):
             
@@ -153,14 +154,20 @@ def handleDivAndSpan(e, doc):
             e.content = [before] + list(e.content) + [after]
             return e
 
+
+def handleHeaderLevelOne(e, doc):
+    if isinstance(e.next, pf.Div) and ("Sinnspruch" in e.next.classes):
+        logging.debug("We have work to do!")
+
+
 def action(e, doc):
 
     if isinstance(e, pf.Header) and (e.level == 1):
-        if isinstance(e.next, pf.Div) and ("Sinnspruch" in e.next.classes):
-            logging.debug("We have work to do!")
+        return handleHeaderLevelOne(e, doc)
 
     if isinstance(e, pf.Span) or isinstance(e, pf.Div):
         return handleDivAndSpan(e, doc)
+ 
         
 def main():
     logging.debug("Start style.py")
