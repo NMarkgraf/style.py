@@ -9,6 +9,7 @@
   Release:
   ========
   0.1   - 21.03.2018 (nm) - Erste Version
+  0.2   - 25.03.2018 (nm) - Code (angebolich) "Wartbarer"" gemacht.
 
 
   WICHTIG:
@@ -58,91 +59,105 @@ import panflute as pf  # panflute fuer den pandoc AST
 import re as re  # re fuer die Regulaeren Ausdruecke
 import logging  # logging fuer die 'typography.log'-Datei
 
+'''
+  Constans for PrePost Strings
+'''
+PRE = 0
+POST = 1
 
+'''
+ Constants for (La)TeX 
+'''
 TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
 TEX_CENTER_AFTER = """\\end{center}\n"""
 
 
+FONTSIZECLASSES = ("tiny", "scriptsize", "footnotesize", "small", 
+                    "normalsize", "large", "Large", 
+                    "LARGE", "huge", "Huge")
+
 '''
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
 '''
-logging.basicConfig(filename='style.log', level=logging.ERROR)
-#logging.basicConfig(filename='style.log', level=logging.DEBUG)
+#logging.basicConfig(filename='style.log', level=logging.ERROR)
+logging.basicConfig(filename='style.log', level=logging.DEBUG)
 
 '''
-
 \tiny, \scriptsize, \footnotesize, \small, \normalsize (default), \large, \Large, \LARGE, \huge and \Huge. 
 '''
 
+'''
+ Handle Classes ".tiny", ".scriptsize", ".footnotesize", ".small", 
+                ".normalsize" (default), "large", ".Large", 
+                ".LARGE", ".huge"" and ".Huge".
+'''
+
+'''
+ Add Strings to PrePost Tupple
+'''
+def addToPrePost(prepost, pre, post ):
+    return (prepost[PRE]+pre, post+prepost[POST])
+
+
+'''
+ Add new Fontsize
+'''
+
+def handleFontSize(newfontsize, prepost):
+    logging.debug("Adding new fontsize"+ newfontsize)
+    return addToPrePost(prepost, "{\\"+newfontsize+"{}", "}")
+
+
+'''
+ Handle center class
+'''
+def handleCenterClass(prepost):
+    logging.debug("Adding center enviroment")
+    return addToPrePost(prepost, TEX_CENTER_BEFORE, TEX_CENTER_AFTER)
+
+'''
+ Handle DIV and SPAN Blocks
+'''
+def handleDivAndSpan(e, doc):
+    if (doc.format in ["latex", "beamer"]):
+        prepost = ("", "")
+
+        if 'center' in e.classes:
+            prepost = handleCenterClass(prepost)
+            
+        for fontsize in FONTSIZECLASSES:
+            if fontsize in e.classes:
+                prepost = handleFontSize(fontsize, prepost)
+
+        if 'Quelle' in e.classes:
+            prepost = addToPrePost(prepost, "{\\scriptsize ", "}")
+
+        if 'Sinnspruch' in e.classes:
+            prepost = addToPrePost(prepost, 
+                "\n\\mode<all>\\begin{quote}\\small ", 
+                "\\end{quote}\n\\mode<*>")
+
+        if isinstance(e, pf.Div):
+            before = pf.RawBlock(prepost[PRE], format="latex")
+            after = pf.RawBlock(prepost[POST], format="latex")
+
+        if isinstance(e, pf.Span):
+            before = pf.RawInline(prepost[PRE], format="latex")
+            after = pf.RawInline(prepost[POST], format="latex")
+
+        if prepost != ("", ""):
+            e.content = [before] + list(e.content) + [after]
+            return e
+
 def action(e, doc):
 
+    if isinstance(e, pf.Header) and (e.level == 1):
+        if isinstance(e.next, pf.Div) and ("Sinnspruch" in e.next.classes):
+            logging.debug("We have work to do!")
+
     if isinstance(e, pf.Span) or isinstance(e, pf.Div):
+        return handleDivAndSpan(e, doc)
         
-        if (doc.format in ["latex", "beamer"]):
-
-            beforeTeX = ""
-            afterTeX = ""
-    
-            if 'center' in e.classes:
-                logging.debug("Adding center enviroment")
-                beforeTeX = beforeTeX+TEX_CENTER_BEFORE
-                afterTeX =  TEX_CENTER_AFTER+afterTeX
-     
-            if 'Large' in e.classes:
-                logging.debug("Adding Large")
-                beforeTeX = beforeTeX+"{\\Large "
-                afterTeX = "}"+afterTeX
-    
-            if 'LARGE' in e.classes:
-                logging.debug("Adding LARGE")
-                beforeTeX = beforeTeX+"{\\LARGE "
-                afterTeX = "}"+afterTeX
-                
-            if 'huge' in e.classes:
-                logging.debug("Adding huge")
-                beforeTeX = beforeTeX+"{\\huge "
-                afterTeX = "}"+afterTeX
-                
-            if 'normalsize' in e.classes:
-                beforeTeX = beforeTeX+"{\\normalsize "
-                afterTeX = "}"+afterTeX
-    
-            if 'small' in e.classes:
-                beforeTeX = beforeTeX+"{\\small "
-                afterTeX = "}"+afterTeX
-                
-            if 'footnotesize' in e.classes:
-                beforeTeX = beforeTeX+"{\\footnotesize "
-                afterTeX = "}"+afterTeX
-    
-            if 'scriptsize' in e.classes:
-                beforeTeX = beforeTeX+"{\\scriptsize "
-                afterTeX = "}"+afterTeX
-                
-            if 'tiny' in e.classes:
-                beforeTeX = beforeTeX+"{\\tiny "
-                afterTeX = "}"+afterTeX
-                
-            if 'Quelle' in e.classes:
-                beforeTeX = beforeTeX+"{\\scriptsize "
-                afterTeX = "}"+afterTeX
-            
-            if 'Sinnspruch' in e.classes:
-                beforeTeX = beforeTeX+"\n\\mode<all>\\begin{quote}\\small "
-                afterTeX = "\\end{quote}\n\mode<*>"+afterTeX
-            
-            if isinstance(e, pf.Div):
-                before = pf.RawBlock(beforeTeX, format="latex")
-                after = pf.RawBlock(afterTeX, format="latex")
-
-            if isinstance(e, pf.Span):   
-                before = pf.RawInline(beforeTeX, format="latex")
-                after = pf.RawInline(afterTeX, format="latex")
-
-            if beforeTeX != "":
-                e.content = [before] + list(e.content) + [after]
-                return e
-
 def main():
     logging.debug("Start style.py")
     pf.toJSONFilter(action=action)

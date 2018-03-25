@@ -3,12 +3,6 @@ title: "Ein kleiner Test"
 author: "Norman Markgraf"
 date: "18 Dezember 2017"
 output:
-  ioslides_presentation: 
-    slide_level: 2
-    css: ../css/style-py.css
-  slidy_presentation: 
-    slide_level: 2
-    css: ../css/style-py.css
   beamer_presentation:
     includes:
       in_header: header.tex
@@ -18,6 +12,12 @@ output:
     - --filter
     - ../style.py
     slide_level: 2
+  slidy_presentation: 
+    slide_level: 2
+    css: ../css/style-py.css
+  ioslides_presentation: 
+    slide_level: 2
+    css: ../css/style-py.css
   html_document:
     css: ../css/style-py.css
 ---
@@ -51,11 +51,19 @@ Das ist GROSS!
 
 Das ist normaler Text!
 
+
 ## Nun Spans statt Divs
 
 Das ist [ein kleiner]{.small} [GROSSER]{.Large} Test!
 
-# Nun einmal ein Sinnspruch
+
+## Alle auf einer Seite:
+
+[tiny]{.tiny} [scriptsize]{.scriptsize} [footnotesize]{.footnotesize} [small]{.small}
+(default) [normalsize ]{.normalsize} [large]{.Large} [Large]{.Large} [huge]{.huge} [Huge]{.Huge}
+
+
+# Nun einmal ein Sinnspruch im Section-Title!
 
 ::: {.Sinnspruch}
 Das hier ist ein Sinnspruch und sollte als solcher.
@@ -66,7 +74,7 @@ Auch genau so behandelt werden.
 :::
 
 
-## Nun einmal ein Sinnspruch
+## Ein Sinnspruch im normalen Frame
 
 ::: {.Sinnspruch}
 Das hier ist ein Sinnspruch und sollte als solcher.
