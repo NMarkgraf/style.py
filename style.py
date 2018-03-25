@@ -71,26 +71,24 @@ POST = 1
 TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
 TEX_CENTER_AFTER = """\\end{center}\n"""
 
-
-FONTSIZECLASSES = ("tiny", "scriptsize", "footnotesize", "small", 
-                    "normalsize", "large", "Large", 
-                    "LARGE", "huge", "Huge")
-
 '''
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
 '''
-# logging.basicConfig(filename='style.log', level=logging.ERROR)
-logging.basicConfig(filename='style.log', level=logging.DEBUG)
+DEBUGLEVEL = logging.ERROR  # or .DEBUG  or .INFO
+logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
 '''
-\tiny, \scriptsize, \footnotesize, \small, \normalsize (default), \large, \Large, \LARGE, \huge and \Huge. 
-'''
+ LaTeX Fontsize commands in beamer:
+ \tiny, \scriptsize, \footnotesize, \small, \normalsize (default), 
+ \large, \Large, \LARGE, \huge and \Huge. 
 
-'''
  Handle Classes ".tiny", ".scriptsize", ".footnotesize", ".small", 
                 ".normalsize" (default), "large", ".Large", 
                 ".LARGE", ".huge"" and ".Huge".
 '''
+FONTSIZECLASSES = ("tiny", "scriptsize", "footnotesize", "small", 
+                    "normalsize", "large", "Large", 
+                    "LARGE", "huge", "Huge")
 
 '''
  Add Strings to PrePost Tupple
@@ -168,7 +166,6 @@ def action(e, doc):
     if isinstance(e, pf.Span) or isinstance(e, pf.Div):
         return handleDivAndSpan(e, doc)
  
-        
 def main():
     logging.debug("Start style.py")
     pf.toJSONFilter(action=action)
