@@ -20,7 +20,7 @@
   RUN THE TESTS:
   ==============
   Um die unit tests auszuführen kann man:
-    
+
     > python3 style_unittest.py
 
   im Unterverzeichnis /test/ eingeben!
@@ -45,7 +45,7 @@
 import sys
 import unittest
 
-sys.path.append('..') 
+sys.path.append('..')
 from style import *
 
 
@@ -77,6 +77,6 @@ class StyleTest(unittest.TestCase):
         prepost = prepostBefore
         self.assertEqual(handleFontSize(newFontsize, prepost), prepostAfter)
 
-    
-if __name__ == "__main__": 
-    unittest.main(verbosity=2)
+
+if __name__ == "__main__":
+    unittest.main()

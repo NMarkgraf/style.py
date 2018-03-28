@@ -24,18 +24,6 @@
       > chmod a+x style.py
    ausfuehren!
 
-  LaTeX:
-  ======
-  Der Befehl "xspace" benötigst das Paket "xspace".
-  Also bitte "usepackage{xspace}" einbauen!
-  Ab Version 0.6 wird von "\," auf "thinspace" umgestellt.
-
-  Informationen zur Typographie:
-  ==============================
-  URL: https://www.korrekturen.de/fehler_und_stilblueten/die_sieben_haeufigsten_typographie-suenden.shtml
-  URL: http://www.typolexikon.de/abstand/
-  URL: https://de.wikipedia.org/wiki/Schmales_Leerzeichen
-
 
   Lizenz:
   =======
@@ -66,7 +54,7 @@ PRE = 0
 POST = 1
 
 '''
- Constants for (La)TeX 
+ Constants for (La)TeX
 '''
 TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
 TEX_CENTER_AFTER = """\\end{center}\n"""
@@ -79,48 +67,49 @@ logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
 '''
  LaTeX Fontsize commands in beamer:
- \tiny, \scriptsize, \footnotesize, \small, \normalsize (default), 
- \large, \Large, \LARGE, \huge and \Huge. 
+ \tiny, \scriptsize, \footnotesize, \small, \normalsize (default),
+ \large, \Large, \LARGE, \huge and \Huge.
 
- Handle Classes ".tiny", ".scriptsize", ".footnotesize", ".small", 
-                ".normalsize" (default), "large", ".Large", 
+ Handle Classes ".tiny", ".scriptsize", ".footnotesize", ".small",
+                ".normalsize" (default), "large", ".Large",
                 ".LARGE", ".huge"" and ".Huge".
 '''
-FONTSIZECLASSES = ("tiny", "scriptsize", "footnotesize", "small", 
-                    "normalsize", "large", "Large", 
-                    "LARGE", "huge", "Huge")
+FONTSIZECLASSES = (
+    "tiny", "scriptsize", "footnotesize", "small",
+    "normalsize", "large", "Large",
+    "LARGE", "huge", "Huge")
 
-'''
- Add Strings to PrePost Tupple
-'''
-def addToPrePost(prepost, pre, post ):
+
+def addToPrePost(prepost=("", ""), pre="", post=""):
+    '''
+     Add Strings to PrePost Tupple
+    '''
     return (prepost[PRE]+pre, post+prepost[POST])
 
 
-'''
- Add new Fontsize
-'''
+def handleFontSize(fontsize="", prepost=("", "")):
+    '''
+     Add new Fontsize
+    '''
+    logging.debug("Adding new fontsize '" + fontsize + "'.")
+    return addToPrePost(prepost, "{\\"+fontsize+"{}", "}")
 
-def handleFontSize(newfontsize, prepost):
-    logging.debug("Adding new fontsize"+ newfontsize)
-    return addToPrePost(prepost, "{\\"+newfontsize+"{}", "}")
 
-
-'''
- Handle center class
-'''
 def handleCenterClass(prepost):
-    logging.debug("Adding center enviroment")
+    '''
+     Handle center class
+    '''
+    logging.debug("Adding center enviroment.")
     return addToPrePost(prepost, TEX_CENTER_BEFORE, TEX_CENTER_AFTER)
 
 
-'''
- Handle DIV and SPAN Blocks
-'''
 def handleDivAndSpanLaTeX(e, prepost):
+    '''
+     Handle DIV and SPAN Blocks in LaTeX Context
+    '''
     if 'center' in e.classes:
         prepost = handleCenterClass(prepost)
-        
+
     for fontsize in FONTSIZECLASSES:
         if fontsize in e.classes:
             prepost = handleFontSize(fontsize, prepost)
@@ -129,18 +118,21 @@ def handleDivAndSpanLaTeX(e, prepost):
         prepost = addToPrePost(prepost, "{\\scriptsize ", "}")
 
     if 'Sinnspruch' in e.classes:
-        prepost = addToPrePost(prepost, 
-            "\n\\mode<all>\\begin{quote}\\small ", 
+        prepost = addToPrePost(
+            prepost,
+            "\n\\mode<all>\\begin{quote}\\small ",
             "\\end{quote}\n\\mode<*>")
     return prepost
 
 
 def handleDivAndSpan(e, doc):
+    '''
+     Handle DIV and SPAN Blocks in gerneral
+    '''
     if (doc.format in ["latex", "beamer"]):
         prepost = handleDivAndSpanLaTeX(e, ("", ""))
-        
+
         if prepost != ("", ""):
-            
             if isinstance(e, pf.Div):
                 before = pf.RawBlock(prepost[PRE], format="latex")
                 after = pf.RawBlock(prepost[POST], format="latex")
@@ -154,22 +146,35 @@ def handleDivAndSpan(e, doc):
 
 
 def handleHeaderLevelOne(e, doc):
+    '''
+     Future work!
+    '''
     if isinstance(e.next, pf.Div) and ("Sinnspruch" in e.next.classes):
         logging.debug("We have work to do!")
 
 
 def action(e, doc):
+    '''
+     Main action function for panflute
+    '''
     if isinstance(e, pf.Header) and (e.level == 1):
         return handleHeaderLevelOne(e, doc)
 
     if isinstance(e, pf.Span) or isinstance(e, pf.Div):
         return handleDivAndSpan(e, doc)
- 
+
+
 def main():
+    '''
+     main function
+    '''
     logging.debug("Start style.py")
     pf.toJSONFilter(action=action)
     logging.debug("End style.py")
 
 
+'''
+ as always
+'''
 if __name__ == "__main__":
     main()
