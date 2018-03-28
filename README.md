@@ -23,4 +23,4 @@ um.
 
 ## Better Code Hub
 
-Ich versuche diese Code bei 7/10 zu halten. Mehr geht z.Z. auch kaum.
+Ich versuche diese Code bei 7+/10 zu halten. Mehr geht z.Z. auch kaum.

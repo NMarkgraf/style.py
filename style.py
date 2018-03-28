@@ -74,7 +74,7 @@ TEX_CENTER_AFTER = """\\end{center}\n"""
 '''
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
 '''
-DEBUGLEVEL = logging.ERROR  # or .DEBUG  or .INFO
+DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
 logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
 '''
