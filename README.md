@@ -1,3 +1,4 @@
+[![StyleCI](https://styleci.io/repos/126166922/shield?branch=master)](https://styleci.io/repos/126166922)
 [![BCH compliance](https://bettercodehub.com/edge/badge/NMarkgraf/style.py?branch=master)](https://bettercodehub.com/)
 
 # style.py
