@@ -19,11 +19,11 @@
 
   RUN THE TESTS:
   ==============
-  Um die unit tests auszuführen kann man:
+  Um die unit tests auszuführen kann man im Terminal den Befehl
 
-    > python3 style_unittest.py
+    > python3 -m unittest test/style_unittest.py
 
-  im Unterverzeichnis /test/ eingeben!
+  im Hauptverzeichnis des Projektes eingeben!
 
   Lizenz:
   =======
@@ -42,10 +42,10 @@
 
 '''
 
-import sys
+# import sys
 import unittest
 
-sys.path.append('..')
+# sys.path.append('..')
 from style import *
 
 
