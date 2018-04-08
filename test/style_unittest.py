@@ -49,6 +49,7 @@
 
 # import sys
 import unittest
+import io
 
 # sys.path.append('..')
 from style import *
@@ -56,31 +57,20 @@ from style import *
 
 class StyleTest(unittest.TestCase):
 
-    def test_addToPrePost1(self):
-        pre = "xxx"
-        post = "zzz"
-        prepostBefore = ("", "")
-        prepostAfter = ("xxx", "zzz")
-        prepost = prepostBefore
-        self.assertEqual(addToPrePost(prepost, pre, post), prepostAfter)
+    def test_action1(self):
+        md = """
+# Testtitle
 
-    def test_addToPrePost2(self):
-        pre = "xxx"
-        post = "zzz"
-        prepostBefore = ("", "")
-        prepostAfter = ("xxxyyy", "uuuzzz")
-        prepost = prepostBefore
-        prepost = addToPrePost(prepost, pre, post)
-        pre = "yyy"
-        post = "uuu"
-        self.assertEqual(addToPrePost(prepost, pre, post), prepostAfter)
+## Slidetitle
 
-    def test_handleFontSize1(self):
-        newFontsize = "XXXXX"
-        prepostBefore = ("", "")
-        prepostAfter = ("{\\" + newFontsize + "{}", "}")
-        prepost = prepostBefore
-        self.assertEqual(handleFontSize(newFontsize, prepost), prepostAfter)
+Just a simple *and* not **so** dump ***text***.
+
+"""
+
+        content = pf.convert_text(md)
+        output = io.StringIO()
+        doc = pf.Doc(*content, format='markdown')
+ #       pf.run_filters(action, doc=doc, output_stream = output)
 
 
 if __name__ == "__main__":
