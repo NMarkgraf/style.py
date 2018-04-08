@@ -21,7 +21,7 @@
   ==============
   Um die unit tests auszuführen kann man im Terminal den Befehl
 
-    > python3 -m unittest test/style_unittest.py
+    > python3 -m unittest test/decorator_unittest.py
 
   im Hauptverzeichnis des Projektes eingeben!
 
@@ -52,36 +52,44 @@ import unittest
 
 # sys.path.append('..')
 from style import *
+from decorator import *
 
+class DecoratorTest(unittest.TestCase):
 
-class StyleTest(unittest.TestCase):
-
-    def test_addToPrePost1(self):
+    def test_addAndgetPre(self):
         pre = "xxx"
-        post = "zzz"
-        prepostBefore = ("", "")
-        prepostAfter = ("xxx", "zzz")
-        prepost = prepostBefore
-        self.assertEqual(addToPrePost(prepost, pre, post), prepostAfter)
+        dec = Decorator()
+        dec.addPre(pre)
+        self.assertEqual(dec.getPre(), pre)
+        del dec
+        
 
-    def test_addToPrePost2(self):
-        pre = "xxx"
-        post = "zzz"
-        prepostBefore = ("", "")
-        prepostAfter = ("xxxyyy", "uuuzzz")
-        prepost = prepostBefore
-        prepost = addToPrePost(prepost, pre, post)
-        pre = "yyy"
-        post = "uuu"
-        self.assertEqual(addToPrePost(prepost, pre, post), prepostAfter)
+    def test_addAndgetPost(self):
+        post = "xxx"
+        dec = Decorator()
+        dec.addPost(post)
+        self.assertEqual(dec.getPost(), post)
+        del dec
+    
+    def test_hasPrePostFalse(self):
+        dec = Decorator()
+        self.assertFalse(dec.hasPrePost())        
+        del dec
 
-    def test_handleFontSize1(self):
+    def test_hasPrePostTrue(self):
+        dec = Decorator()
+        dec.addPre("xxx")
+        dec.addPost("yyy")
+        self.assertTrue(dec.hasPrePost())        
+        del dec
+
+    def test_handleClassFontsizeLaTeX(self):
         newFontsize = "XXXXX"
-        prepostBefore = ("", "")
-        prepostAfter = ("{\\" + newFontsize + "{}", "}")
-        prepost = prepostBefore
-        self.assertEqual(handleFontSize(newFontsize, prepost), prepostAfter)
-
+        prepostAfter = "{\\" + newFontsize + "{}}"
+        dec = LaTeXDecorator()
+        dec.handleClassFontsize(newFontsize)
+        self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
+        del dec
 
 if __name__ == "__main__":
     unittest.main()

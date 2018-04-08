@@ -10,6 +10,7 @@
   ========
   0.1   - 21.03.2018 (nm) - Erste Version
   0.2   - 25.03.2018 (nm) - Code (angebolich) "Wartbarer"" gemacht.
+  0.3   - 08.04.2018 (nm) - Umgestellt auf Decorator Klasse
 
 
   WICHTIG:
@@ -46,18 +47,7 @@
 import panflute as pf  # panflute fuer den pandoc AST
 import re as re  # re fuer die Regulaeren Ausdruecke
 import logging  # logging fuer die 'typography.log'-Datei
-
-'''
-  Constans for PrePost Strings
-'''
-PRE = 0
-POST = 1
-
-'''
- Constants for (La)TeX
-'''
-TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
-TEX_CENTER_AFTER = """\\end{center}\n"""
+from decorator import *
 
 '''
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
@@ -79,70 +69,31 @@ FONTSIZECLASSES = (
     "normalsize", "large", "Large",
     "LARGE", "huge", "Huge")
 
-
-def addToPrePost(prepost=("", ""), pre="", post=""):
-    '''
-     Add Strings to PrePost Tupple
-    '''
-    return (prepost[PRE]+pre, post+prepost[POST])
-
-
-def handleFontSize(fontsize="", prepost=("", "")):
-    '''
-     Add new Fontsize
-    '''
-    logging.debug("Adding new fontsize '" + fontsize + "'.")
-    return addToPrePost(prepost, "{\\"+fontsize+"{}", "}")
-
-
-def handleCenterClass(prepost):
-    '''
-     Handle center class
-    '''
-    logging.debug("Adding center enviroment.")
-    return addToPrePost(prepost, TEX_CENTER_BEFORE, TEX_CENTER_AFTER)
-
-
-def handleDivAndSpanLaTeX(e, prepost):
-    '''
-     Handle DIV and SPAN Blocks in LaTeX Context
-    '''
-    if 'center' in e.classes:
-        prepost = handleCenterClass(prepost)
-
-    for fontsize in FONTSIZECLASSES:
-        if fontsize in e.classes:
-            prepost = handleFontSize(fontsize, prepost)
-
-    if 'Quelle' in e.classes:
-        prepost = addToPrePost(prepost, "{\\scriptsize ", "}")
-
-    if 'Sinnspruch' in e.classes:
-        prepost = addToPrePost(
-            prepost,
-            "\n\\mode<all>\\begin{quote}\\small ",
-            "\\end{quote}\n\\mode<*>")
-    return prepost
-
+dec = Decorator()
 
 def handleDivAndSpan(e, doc):
     '''
      Handle DIV and SPAN Blocks in gerneral
     '''
-    if (doc.format in ["latex", "beamer"]):
-        prepost = handleDivAndSpanLaTeX(e, ("", ""))
 
-        if prepost != ("", ""):
-            if isinstance(e, pf.Div):
-                before = pf.RawBlock(prepost[PRE], format="latex")
-                after = pf.RawBlock(prepost[POST], format="latex")
+    if doc.format in ["latex","beamer"]:
+        dec = LaTeXDecorator()
+    if doc.format == "html":
+        dec = HTMLDecorator()
+        
+    dec.handleDivAndSpan(e)
 
-            if isinstance(e, pf.Span):
-                before = pf.RawInline(prepost[PRE], format="latex")
-                after = pf.RawInline(prepost[POST], format="latex")
+    if dec.hasPrePost():
+        if isinstance(e, pf.Div):
+            before = dec.getBeforeBlock()
+            after = dec.getAfterBlock()
 
-            e.content = [before] + list(e.content) + [after]
-            return e
+        if isinstance(e, pf.Span):
+            before = dec.getBeforeInline()
+            after = dec.getAfterInline()
+
+        e.content = [before] + list(e.content) + [after]
+        return e
 
 
 def handleHeaderLevelOne(e, doc):

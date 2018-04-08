@@ -1,5 +1,7 @@
 [![StyleCI](https://styleci.io/repos/126166922/shield?branch=master)](https://styleci.io/repos/126166922)
 [![BCH compliance](https://bettercodehub.com/edge/badge/NMarkgraf/style.py?branch=master)](https://bettercodehub.com/)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Minimal Python needed: 3.5+](https://img.shields.io/badge/Python-3.5%2B-brightgreen.svg)](https://www.python.org)
 
 # style.py
 
