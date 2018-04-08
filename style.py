@@ -71,16 +71,24 @@ FONTSIZECLASSES = (
 
 dec = Decorator()
 
+def getDecorator(doc):
+    dec = Decorator()
+
+    if doc.format in ["latex","beamer"]:
+        dec = LaTeXDecorator()
+
+    if doc.format == "html":
+        dec = HTMLDecorator()
+        
+    return dec
+
 def handleDivAndSpan(e, doc):
     '''
      Handle DIV and SPAN Blocks in gerneral
     '''
 
-    if doc.format in ["latex","beamer"]:
-        dec = LaTeXDecorator()
-    if doc.format == "html":
-        dec = HTMLDecorator()
-        
+    dec = getDecorator(doc)
+    
     dec.handleDivAndSpan(e)
 
     if dec.hasPrePost():
