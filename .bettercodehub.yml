@@ -1,0 +1,11 @@
+component_depth: 1
+languages:
+- python
+exclude:
+- /example/.*
+- /css/.*
+- .*/LICEMCE
+- .*/README.md
+- .*/style.py.Rproj
+- .*/.gitignore
+- .*/.bettercodehub.yml
