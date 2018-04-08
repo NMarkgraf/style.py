@@ -90,6 +90,7 @@ class LaTeXDecorator(Decorator):
     '''
     TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
     TEX_CENTER_AFTER = """\n\\end{center}\n"""
+    FORMAT = "latex"
 
     def handleClassCenter(self):
         '''
@@ -106,21 +107,27 @@ class LaTeXDecorator(Decorator):
         self.addPre("{\\" + fontsize + "{}")
         self.addPost("}")
 
+    def getRawBlock(self, str):
+        return pf.RawBlock(str, format=self.FORMAT)
+
+    def getRawInline(self, str):
+        return pf.RawInline(str, format=self.FORMAT)
+
     def getBeforeBlock(self):
         if self.hasPrePost():
-            return pf.RawBlock(self.getPre(), format="latex")
+            return self.getRawBlock(self.getPre())
 
     def getBeforeInline(self):
         if self.hasPrePost():
-            return pf.RawInline(self.getPre(), format="latex")
+            return self.getRawInline(self.getPre())
 
     def getAfterBlock(self):
         if self.hasPrePost():
-            return pf.RawBlock(self.getPost(), format="latex")
+            return self.getRawBlock(self.getPost())
 
     def getAfterInline(self):
         if self.hasPrePost():
-            return pf.RawInline(self.getPost(), format="latex")
+            return self.getRawInline(self.getPost())
 
     def handleDivAndSpan(self, elem):
         '''

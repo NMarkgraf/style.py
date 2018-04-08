@@ -4,3 +4,10 @@
 .Ruserdata
 __pycache__
 style.log
+example/EinKleinerTest.tex
+example/EinKleinerTest.nav
+example/EinKleinerTest.snm
+example/EinKleinerTest.toc
+example/sytle.log
+*Old.py
+*.pyc

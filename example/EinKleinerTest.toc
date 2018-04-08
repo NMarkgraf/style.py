@@ -1,2 +1,0 @@
-\beamer@sectionintoc {1}{Test}{2}{0}{1}
-\beamer@sectionintoc {2}{Nun einmal ein Sinnspruch im Section-Title!}{6}{0}{2}
