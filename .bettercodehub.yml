@@ -4,3 +4,8 @@ languages:
 exclude:
 - /example/.*
 - /css/.*
+- .*/LICEMCE
+- .*/README.md
+- .*/style.py.Rproj
+- .*/.gitignore
+- .*/.bettercodehub.yml
