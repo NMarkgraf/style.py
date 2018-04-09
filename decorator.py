@@ -153,13 +153,40 @@ class LaTeXDecorator(Decorator):
         if self.hasPrePost():
             return self.getRawInline(self.getPost())
 
-    def handleDivAndSpan(self, elem):
+    def handleClassJustifiedInDiv(self, alignment):
+        if alignment == "left":
+            self.addPre("\n\\begin{flushright}\n")
+            self.addPost("\n\end{flushright}\n")
+
+        if alignment == "right":
+            self.addPre("\n\\begin{flushleft}\n")
+            self.addPost("\n\end{flushleft}\n")
+
+        if alignment == "center":
+            self.handleClassCenter()
+
+    def handleDiv(self, elem):
         '''
          Handle DIV and SPAN Blocks in LaTeX Context
         '''
         if 'center' in elem.classes:
             self.handleClassCenter()
 
+        if 'justifiedleft' in elem.classes:
+            self.handleClassJustifiedInDiv("left")
+
+        if 'justifiedright' in elem.classes:
+            self.handleClassJustifiedInDiv("right")
+
+    def handleSpan(self, elem):
+        '''
+         Handle DIV and SPAN Blocks in LaTeX Context
+        '''
+
+    def handleDivAndSpan(self, elem):
+        '''
+         Handle DIV and SPAN Blocks in LaTeX Context
+        '''
         for fontsize in self.FONTSIZECLASSES:
             if fontsize in elem.classes:
                 self.handleClassFontsize(fontsize)
