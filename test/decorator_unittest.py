@@ -91,5 +91,24 @@ class DecoratorTest(unittest.TestCase):
         self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
         del dec
 
+    def test_handleClassFontfamilyLaTeX(self):
+        fontfamilies = {
+            "normalfont": "normalfont",
+            "romanfont": "rmfamily",
+            "sansserif": "sffamily",
+            "teletype": "ttfamily",
+            "slanted": "slshape",
+            "italic": "itshape",
+            "smallcaps": "scshape",
+            "upright": "upshape"}
+            
+        for newFontfamily in fontfamilies:
+            prepostAfter = "{\\" + fontfamilies[newFontfamily] + "{}}"
+            dec = LaTeXDecorator()
+            dec.handleClassFontfamily(newFontfamily)
+            self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
+            del dec
+
+
 if __name__ == "__main__":
     unittest.main()
