@@ -62,6 +62,8 @@ Das ist [ein kleiner]{.small} [GROSSER]{.Large} Test!
 [tiny]{.tiny} [scriptsize]{.scriptsize} [footnotesize]{.footnotesize} [small]{.small}
 (default) [normalsize ]{.normalsize} [large]{.Large} [Large]{.Large} [huge]{.huge} [Huge]{.Huge}
 
+[normal]{.normalfont} [roman]{.romanfont} [sanserif]{.sansserif} [teletype]{.teletype} [smallcaps]{.smallcaps}
+[slanted]{.slanted} [upright]{.upright} [italic]{.italic}
 
 # Nun einmal ein Sinnspruch im Section-Title!
 

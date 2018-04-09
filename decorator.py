@@ -25,6 +25,10 @@
    ausfuehren!
 
 
+  PEP8 better pycodestyle
+  =======================
+    > pycodestyle decorator.py
+
   Lizenz:
   =======
   This program is free software: you can redistribute it and/or modify
@@ -47,10 +51,14 @@ import panflute as pf  # panflute fuer den pandoc AST
 
 class Decorator:
     FONTSIZECLASSES = (
-    "tiny", "scriptsize", "footnotesize", "small",
-    "normalsize", "large", "Large",
-    "LARGE", "huge", "Huge")
-    
+        "tiny", "scriptsize", "footnotesize", "small",
+        "normalsize", "large", "Large",
+        "LARGE", "huge", "Huge")
+
+    FONTFAMILYCLASSES = (
+        "normalfont", "romanfont", "sansserif", "teletype",
+        "italic", "smallcaps", "slanted", "upright")
+
     def __init__(self):
         self.pre = ""
         self.post = ""
@@ -79,7 +87,7 @@ class Decorator:
 
     def handleClassFontsize(self, fontsize):
         pass
-    
+
     def handleDivAndSpan(self, elem):
         pass
 
@@ -92,6 +100,16 @@ class LaTeXDecorator(Decorator):
     TEX_CENTER_AFTER = """\n\\end{center}\n"""
     FORMAT = "latex"
 
+    TEX_FONTFAMILY_TAG = {
+        "normalfont": "normalfont",
+        "romanfont": "rmfamily",
+        "sansserif": "sffamily",
+        "teletype": "ttfamily",
+        "slanted": "slshape",
+        "italic": "itshape",
+        "smallcaps": "scshape",
+        "upright": "upshape"}
+
     def handleClassCenter(self):
         '''
         Add center environment
@@ -103,8 +121,14 @@ class LaTeXDecorator(Decorator):
         '''
          Add new Fontsize
         '''
-        # logging.debug("Adding new fontsize '" + fontsize + "'.")
         self.addPre("{\\" + fontsize + "{}")
+        self.addPost("}")
+
+    def handleClassFontfamily(self, fontfamily):
+        '''
+         Add new Fontsize
+        '''
+        self.addPre("{\\" + self.TEX_FONTFAMILY_TAG[fontfamily] + "{}")
         self.addPost("}")
 
     def getRawBlock(self, str):
@@ -135,14 +159,18 @@ class LaTeXDecorator(Decorator):
         '''
         if 'center' in elem.classes:
             self.handleClassCenter()
-    
+
         for fontsize in self.FONTSIZECLASSES:
             if fontsize in elem.classes:
                 self.handleClassFontsize(fontsize)
 
+        for fontfamily in self.FONTFAMILYCLASSES:
+            if fontfamily in elem.classes:
+                self.handleClassFontfamily(fontfamily)
+
         if 'Quelle' in elem.classes:
-             self.handleClassFontsize("scriptsize")
-    
+            self.handleClassFontsize("scriptsize")
+
         if 'Sinnspruch' in elem.classes:
             self.addPre("\n\\mode<all>\\begin{quote}\\small ")
             self.addPost("\\end{quote}\n\\mode<*>")
@@ -150,3 +178,14 @@ class LaTeXDecorator(Decorator):
 
 class HTMLDecorator(Decorator):
     pass
+
+
+def main():
+    pass
+
+
+'''
+ as always
+'''
+if __name__ == "__main__":
+    main()
