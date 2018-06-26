@@ -65,7 +65,7 @@ class StyleTest(unittest.TestCase):
 
 Just a simple *and* not **so** dump ***text***.
 
-"""
+""" 
         content = pf.convert_text(md)
         output = io.StringIO()
         doc = pf.Doc(*content, format='markdown')
