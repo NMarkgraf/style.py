@@ -4,6 +4,20 @@
 
 \newcommand{\Sinnspruch}{\relax}
 
+\newcommand*{\doSolutionSpaceDozi}[2][2-]{%
+\only<1|handout:0>{\phantom{#2}}%
+\only<#1|handout:1>{#2}
+}
+
+\newcommand*{\doSolutionSpaceStudi}[2][1|handout:1]{%
+\only<1|handout:1>\phantom{#2}
+}
+
+\newcommand*{\solutionSpace}[2][2-]{%
+\doSolutionSpaceDozi[#1]{#2}
+}
+
+
 %\AtBeginSection[]%
 %{%
 %\begin{frame}[plain]%

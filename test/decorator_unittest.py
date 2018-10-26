@@ -8,6 +8,7 @@
   Release:
   ========
   0.1   - 28.03.2018 (nm) - Erste Version
+  0.2   - 28.10.2018 (nm) - EIn weitere Test hinzugefügt.
 
 
   WICHTIG:
@@ -90,6 +91,21 @@ class DecoratorTest(unittest.TestCase):
         dec.handleClassFontsize(newFontsize)
         self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
         del dec
+
+    def test_handleClassSolution(self):
+        prepostAfter = "\\solitionSpace[2-]{}"
+        dec = LaTeXDecorator()
+        dec.handleClassSolution()
+        self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
+        del dec
+
+    def test_handleClassSolutionTwo(self):
+        prepostAfter = "\\solitionSpace[3-]{}"
+        dec = LaTeXDecorator()
+        dec.handleClassSolution(type="3-")
+        self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
+        del dec
+
 
     def test_handleClassFontfamilyLaTeX(self):
         fontfamilies = {

@@ -1,7 +1,7 @@
 ---
 title: "Ein kleiner Test"
 author: "Norman Markgraf"
-date: "18 Dezember 2017"
+date: "28 Oktober 2018"
 output:
   beamer_presentation:
     includes:
@@ -56,7 +56,6 @@ Das ist normaler Text!
 
 Das ist [ein kleiner]{.small} [GROSSER]{.Large} Test!
 
-
 ## Alle auf einer Seite:
 
 [tiny]{.tiny} [scriptsize]{.scriptsize} [footnotesize]{.footnotesize} [small]{.small}
@@ -81,6 +80,14 @@ Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur,
 Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus resultierende Freude nach sich zieht?Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur,
 
 :::
+
+## Lücken für Lösungen
+
+Berechnen Sie die folgenden Aufgaben:
+
+- $1+2+3+4=\;$[$10$]{.solution type=2-}
+- $2+3+4+5=\;$[$14$]{.solution type=3-}
+
 
 # Nun einmal ein Sinnspruch im Section-Title!
 
