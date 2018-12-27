@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-'''
+"""
   Quick-Typographie-Filter-Decorator-Class: decorator.py
 
   (C)opyleft in 2018 by Norman Markgraf (nmarkgraf@hotmail.com)
@@ -9,7 +9,9 @@
   Release:
   ========
   0.1   - 05.04.2018 (nm) - Erste Version
-  0.2   - 27.03.2018 (nm) - Code (angebolich) "Wartbarer" gemacht.
+  0.2   - 27.03.2018 (nm) - Code (angeblich) "wartbarer" gemacht.
+  0.2.1 - 14.06.2018 (nm) - Code noch "wartbarer" gemacht. ;-)
+  0.3   - 28.12.2018 (nm) - Kleinere Erweiterungen
 
 
   WICHTIG:
@@ -21,15 +23,12 @@
     Bei *nix und macOS Systemen muss diese Datei als "executable" markiert
     sein!
     Also bitte ein
-    
-      > chmod a+x decorator.py
-      
+      > chmod a+x style.py
    ausfuehren!
 
 
-  PEP8? better use pycodestyle
-  ============================
-  
+  PEP8 better pycodestyle
+  =======================
     > pycodestyle decorator.py
 
   Lizenz:
@@ -47,7 +46,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''
+"""
 
 import panflute as pf  # panflute fuer den pandoc AST
 
@@ -92,44 +91,23 @@ class Decorator:
         pass
 
     def handleDiv(self, elem):
-        '''
-         Handle DIV and SPAN Blocks in LaTeX Context
-
-        :param elem:
-        :return:
-        '''
+        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """
         pass
-
+    
     def handleSpan(self, elem):
-        '''
-         Handle PAN Blocks in LaTeX Context
-
-        :param elem:
-        :return:
-        '''
+        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """
         pass
 
     def handleDivAndSpan(self, elem):
-        '''
-         Handle DIV and SPAN Blocks in LaTeX Context
-
-        :param elem:
-        :return:
-        '''
         pass
-
-    def handleHeader(selfself, elem):
-        '''
-
-        :param elem:
-        :return:
-        '''
 
 
 class LaTeXDecorator(Decorator):
-    '''
+    """
      Constants for (La)TeX
-    '''
+    """
     TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
     TEX_CENTER_AFTER = """\n\\end{center}\n"""
     FORMAT = "latex"
@@ -143,40 +121,30 @@ class LaTeXDecorator(Decorator):
         "italic": "itshape",
         "smallcaps": "scshape",
         "upright": "upshape"}
-
+        
     def handleClassCenter(self):
-        '''
-        Add center environment
-        '''
+        """ Add center environment
+        """
         self.addPre(self.TEX_CENTER_BEFORE)
         self.addPost(self.TEX_CENTER_AFTER)
 
     def handleClassFontsize(self, fontsize):
-        '''
-         Add new Fontsize
-        '''
+        """Add new fontsize.
+        """
         self.addPre("{\\" + fontsize + "{}")
         self.addPost("}")
 
     def handleClassFontfamily(self, fontfamily):
-        '''
-         Add new Fontsize
-        '''
+        """Add new fontfamily.
+        """
         self.addPre("{\\" + self.TEX_FONTFAMILY_TAG[fontfamily] + "{}")
         self.addPost("}")
 
-    def handleClassSolution(self, type="2-"):
-        '''
-         Add a Solution Space
-        '''
-        self.addPre("\\solutionSpace["+str(type)+"]{")
-        self.addPost("}")
+    def getRawBlock(self, txt):
+        return pf.RawBlock(txt, format=self.FORMAT)
 
-    def getRawBlock(self, str):
-        return pf.RawBlock(str, format=self.FORMAT)
-
-    def getRawInline(self, str):
-        return pf.RawInline(str, format=self.FORMAT)
+    def getRawInline(self, txt):
+        return pf.RawInline(txt, format=self.FORMAT)
 
     def getBeforeBlock(self):
         if self.hasPrePost():
@@ -207,9 +175,8 @@ class LaTeXDecorator(Decorator):
             self.handleClassCenter()
 
     def handleDiv(self, elem):
-        '''
-         Handle DIV and SPAN Blocks in LaTeX Context
-        '''
+        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """
         if 'center' in elem.classes:
             self.handleClassCenter()
 
@@ -220,16 +187,12 @@ class LaTeXDecorator(Decorator):
             self.handleClassJustifiedInDiv("right")
 
     def handleSpan(self, elem):
-        '''
-         Handle PAN Blocks in LaTeX Context
-        '''
-        if 'solution' in elem.classes:
-            self.handleClassSolution(elem.attributes["type"])
+        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """
 
     def handleDivAndSpan(self, elem):
-        '''
-         Handle DIV and SPAN Blocks in LaTeX Context
-        '''
+        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """
         for fontsize in self.FONTSIZECLASSES:
             if fontsize in elem.classes:
                 self.handleClassFontsize(fontsize)
@@ -239,11 +202,16 @@ class LaTeXDecorator(Decorator):
                 self.handleClassFontfamily(fontfamily)
 
         if 'Quelle' in elem.classes:
-            self.handleClassFontsize("scriptsize")
+            self.addPre("\n{\\scriptsize{} --\\xspace{} ")
+            self.addPost("}\n")
 
         if 'Sinnspruch' in elem.classes:
-            self.addPre("\n\\mode<all>\\begin{quote}\\small ")
-            self.addPost("\\end{quote}\n\\mode<*>")
+            self.addPre("\n\\begin{quote}\\small{}")
+            self.addPost("\\end{quote}\n")
+            
+        if 'personRight' in elem.classes:
+            self.addPre("\n\\begin{columns}[T]\n\t\\begin{column}[t]{0.74\\textwidth}")
+            self.addPost("\n\t\\end{column}\n\t\\begin{column}[t]{0.24\\textwidth}\n\\personDB{"+elem.attributes["person"]+"}\n\t\\end{column}\n\\end{columns}")
 
 
 class HTMLDecorator(Decorator):
@@ -254,8 +222,8 @@ def main():
     pass
 
 
-'''
+"""
  as always
-'''
+"""
 if __name__ == "__main__":
     main()

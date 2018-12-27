@@ -12,6 +12,7 @@
   0.2   - 25.03.2018 (nm) - Code (angebelich) "wartbarer" gemacht.
   0.3   - 08.04.2018 (nm) - Umgestellt auf Decorator Klasse
   0.3.1 - 14.06.2018 (nm) - Code noch "wartbarer" gemacht.
+  0.4.0 - 27.12.2018 (nm) - Kleinere Erweiterungen.
 
 
   WICHTIG:
@@ -70,7 +71,36 @@ FONTSIZECLASSES = (
     "normalsize", "large", "Large",
     "LARGE", "huge", "Huge")
 
+BLOCKCLASSES = {
+    "theorem",
+    "example",
+    "examples",
+    "definition",
+    "proof",
+    "remark",
+    "remarks",
+    "exercise",
+    "fact",
+    "facts"
+}
+
+TEX_BLOCKCLASSES_TAG = {
+    "theorem": "Satz",
+    "example": "Beispiel",
+    "examples": "Beispiele",
+    "definition": "definition",
+    "proof": "Beweis",
+    "remark": "Bemerkung",
+    "remarks": "Bemerkungen",
+    "exercise": "Uebung",
+    "fact": "Fakt",
+    "facts": "Fakten"
+}
+
+
 dec = Decorator()
+
+blocktag = None
 
 
 def setDecorator(doc):
@@ -123,14 +153,53 @@ def handleHeaderLevelOne(e, doc):
         logging.debug("We have work to do!")
 
 
+def handleHeaderBlockLevel(e, doc):
+    global blocktag
+    tag = blocktag
+    blocktag = None
+    before = None
+    if tag:
+        before = pf.RawBlock("\\end{"+tag+"}\n", "latex")
+        if "endblock" in e.classes:
+            return before
+
+    for blocktype in BLOCKCLASSES:
+        if blocktype in e.classes: 
+            tag = TEX_BLOCKCLASSES_TAG[blocktype]
+            elem = pf.Div()
+            elem.content = [
+                pf.Plain(
+                    pf.RawInline("\n\\begin{"+tag+"}[", "latex"),
+                    *e.content,
+                    pf.RawInline("]\n", "latex")
+                    )
+            ]
+            blocktag = tag
+            if before:
+                return [before, elem]
+            return elem
+        
+        
+def handleHeader(e, doc):
+    global blocktag
+    tag = blocktag
+    blocktag = None
+    if "endblock" in e.classes:
+        return pf.RawBlock("\\end{"+tag+"}\n")
+    if tag:
+        return [pf.RawBlock("\\end{"+tag+"}\n", "latex"), e]
+
 def action(e, doc):
     """Main action function for panflute.
     """
-    if isinstance(e, pf.Header) and e.level == 1:
-        return handleHeaderLevelOne(e, doc)
+    if isinstance(e, pf.Header) and e.level < 4:
+        return handleHeader(e, doc)
 
     if isinstance(e, pf.Span) or isinstance(e, pf.Div):
         return handleDivAndSpan(e, doc)
+
+    if isinstance(e, pf.Header) and e.level == 4:
+        return handleHeaderBlockLevel(e, doc)
 
 
 def main():
