@@ -91,8 +91,39 @@ class Decorator:
     def handleClassFontsize(self, fontsize):
         pass
 
-    def handleDivAndSpan(self, elem):
+    def handleDiv(self, elem):
+        '''
+         Handle DIV and SPAN Blocks in LaTeX Context
+
+        :param elem:
+        :return:
+        '''
         pass
+
+    def handleSpan(self, elem):
+        '''
+         Handle PAN Blocks in LaTeX Context
+
+        :param elem:
+        :return:
+        '''
+        pass
+
+    def handleDivAndSpan(self, elem):
+        '''
+         Handle DIV and SPAN Blocks in LaTeX Context
+
+        :param elem:
+        :return:
+        '''
+        pass
+
+    def handleHeader(selfself, elem):
+        '''
+
+        :param elem:
+        :return:
+        '''
 
 
 class LaTeXDecorator(Decorator):
