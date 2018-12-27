@@ -13,6 +13,7 @@
   0.3   - 08.04.2018 (nm) - Umgestellt auf Decorator Klasse
   0.3.1 - 14.06.2018 (nm) - Code noch "wartbarer" gemacht.
   0.4.0 - 27.12.2018 (nm) - Kleinere Erweiterungen.
+  0.4.1 - 27.12.2018 (nm) - Umstellung auf autofilter.
 
 
   WICHTIG:
@@ -202,12 +203,24 @@ def action(e, doc):
         return handleHeaderBlockLevel(e, doc)
 
 
-def main():
+def prepare(doc):
+    pass
+
+
+def finalize(doc):
+    pass
+
+
+def main(doc=None):
     """main function.
     """
     logging.debug("Start style.py")
-    pf.toJSONFilter(action=action)
+    ret = pf.run_filter(action,
+                         prepare=prepare,
+                         finalize=finalize,
+                         doc=doc) 
     logging.debug("End style.py")
+    return ret
 
 
 """
