@@ -204,15 +204,30 @@ def action(e, doc):
 
 
 def prepare(doc):
+    """Do nothing before action, but it is necessary for 'autofilter'.
+
+    :param doc:
+    :return:
+    """
     pass
 
 
 def finalize(doc):
+    """Do nothing after action, but it is necessary for 'autofilter'.
+
+    :param doc:
+    :return:
+    """
     pass
 
 
 def main(doc=None):
-    """main function.
+    """Main function.
+
+    start logging, do work and close logging.
+
+    :param doc: document to parse
+    :return: parsed document
     """
     logging.debug("Start style.py")
     ret = pf.run_filter(action,
