@@ -56,7 +56,7 @@ from decorator import *
 """
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
  Durch eine Datei "style.loglevel.<level>" kann mit den
-    
+
     <level>=debug|info|error
  
  der level für das logging extern ausgewählt werden.
