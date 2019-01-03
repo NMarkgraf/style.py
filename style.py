@@ -4,7 +4,7 @@
 """
   Quick-Typographie-Filter: style.py
 
-  (C)opyleft in 2018 by Norman Markgraf (nmarkgraf@hotmail.com)
+  (C)opyleft in 2018/19 by Norman Markgraf (nmarkgraf@hotmail.com)
 
   Release:
   ========
@@ -14,6 +14,7 @@
   0.3.1 - 14.06.2018 (nm) - Code noch "wartbarer" gemacht.
   0.4.0 - 27.12.2018 (nm) - Kleinere Erweiterungen.
   0.4.1 - 27.12.2018 (nm) - Umstellung auf autofilter.
+  0.4.2 - 03.01.2019 (nm) - Bugfixe
 
 
   WICHTIG:
@@ -48,14 +49,29 @@
 
 
 import panflute as pf  # panflute fuer den pandoc AST
-import re as re  # re fuer die Regulaeren Ausdruecke
 import logging  # logging fuer die 'typography.log'-Datei
+import os as os  # check if file exists.
 from decorator import *
 
 """
  Eine Log-Datei "style.log" erzeugen um einfacher zu debuggen
+ Durch eine Datei "style.loglevel.<level>" kann mit den
+    
+    <level>=debug|info|error
+ 
+ der level für das logging extern ausgewählt werden.
 """
-DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
+if os.path.exists("style.loglevel.debug"): 
+    DEBUGLEVEL = logging.DEBUG
+elif os.path.exists("style.loglevel.info"):
+    DEBUGLEVEL = logging.INFO
+elif os.path.exists("style.loglevel.warning"):
+    DEBUGLEVEL = logging.WARNING
+elif os.path.exists("style.loglevel.error"):
+    DEBUGLEVEL = logging.ERROR
+else:
+    DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
+    
 logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
 """
@@ -155,6 +171,12 @@ def handleHeaderLevelOne(e, doc):
 
 
 def handleHeaderBlockLevel(e, doc):
+    """
+
+    :param e:
+    :param doc:
+    :return:
+    """
     global blocktag
     tag = blocktag
     blocktag = None
@@ -171,7 +193,7 @@ def handleHeaderBlockLevel(e, doc):
             elem.content = [
                 pf.Plain(
                     pf.RawInline("\n\\begin{"+tag+"}[", "latex"),
-                    *e.content,
+                    e.content,
                     pf.RawInline("]\n", "latex")
                     )
             ]
@@ -182,6 +204,12 @@ def handleHeaderBlockLevel(e, doc):
         
         
 def handleHeader(e, doc):
+    """
+
+    :param e:
+    :param doc:
+    :return:
+    """
     global blocktag
     tag = blocktag
     blocktag = None
@@ -206,8 +234,8 @@ def action(e, doc):
 def prepare(doc):
     """Do nothing before action, but it is necessary for 'autofilter'.
 
-    :param doc:
-    :return:
+    :param doc: current document
+    :return: current document
     """
     pass
 
@@ -215,8 +243,8 @@ def prepare(doc):
 def finalize(doc):
     """Do nothing after action, but it is necessary for 'autofilter'.
 
-    :param doc:
-    :return:
+    :param doc: current document
+    :return: current document
     """
     pass
 
@@ -229,12 +257,12 @@ def main(doc=None):
     :param doc: document to parse
     :return: parsed document
     """
-    logging.debug("Start style.py")
+    logging.debug("Start pandoc filter 'style.py'")
     ret = pf.run_filter(action,
                          prepare=prepare,
                          finalize=finalize,
                          doc=doc) 
-    logging.debug("End style.py")
+    logging.debug("End pandoc filter 'style.py'")
     return ret
 
 
