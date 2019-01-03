@@ -8,11 +8,7 @@
 
   Release:
   ========
-  0.1   - 05.04.2018 (nm) - Erste Version
-  0.2   - 27.03.2018 (nm) - Code (angeblich) "wartbarer" gemacht.
-  0.2.1 - 14.06.2018 (nm) - Code noch "wartbarer" gemacht. ;-)
-  0.3   - 28.12.2018 (nm) - Kleinere Erweiterungen
-
+  please see style.py!
 
   WICHTIG:
   ========
