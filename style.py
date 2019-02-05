@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-  Quick-Typographie-Filter: style.py
+  style.py (Release: 0.4.3)
+  ========-----------------
+  A Quick-Typographie-Pandoc-Panflute-Filter.
 
   (C)opyleft in 2018/19 by Norman Markgraf (nmarkgraf@hotmail.com)
 
@@ -15,6 +17,7 @@
   0.4.0 - 27.12.2018 (nm) - Kleinere Erweiterungen.
   0.4.1 - 27.12.2018 (nm) - Umstellung auf autofilter.
   0.4.2 - 03.01.2019 (nm) - Bugfixe
+  0.4.3 - 05.02.2019 (nm) - Fehler behoben.
 
 
   WICHTIG:
@@ -188,21 +191,28 @@ def handleHeaderBlockLevel(e, doc):
 
     for blocktype in BLOCKCLASSES:
         if blocktype in e.classes: 
-            tag = TEX_BLOCKCLASSES_TAG[blocktype]
-            elem = pf.Div()
-            elem.content = [
-                pf.Plain(
-                    pf.RawInline("\n\\begin{"+tag+"}[", "latex"),
-                    e.content,
-                    pf.RawInline("]\n", "latex")
-                    )
-            ]
-            blocktag = tag
-            if before:
-                return [before, elem]
-            return elem
-        
-        
+            logging.debug("BLOCKTYPE:" + blocktype)
+            if not isinstance(e.content, pf.ListContainer):
+                logging.debug("CONTENT:" + pf.stringify(e.content))
+                tag = TEX_BLOCKCLASSES_TAG[blocktype]
+                elem = pf.Div()
+                elem.content = [
+                    pf.Plain(
+                        pf.RawInline("\n\\begin{"+tag+"}[", "latex"),
+                        e.content,
+                        pf.RawInline("]\n", "latex")
+                        )
+                ]
+
+                blocktag = tag
+
+                if before:
+                    return [before, elem]
+                return elem
+            else:
+                logging.debug("CONTENT: Listcontainer")
+
+
 def handleHeader(e, doc):
     """
 
