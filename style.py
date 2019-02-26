@@ -18,6 +18,7 @@
   0.4.1 - 27.12.2018 (nm) - Umstellung auf autofilter.
   0.4.2 - 03.01.2019 (nm) - Bugfixe
   0.4.3 - 05.02.2019 (nm) - Fehler behoben.
+  0.4.4 - 26.02.2019 (nm) - Kleinere Schönheitsupdates
 
 
   WICHTIG:
@@ -234,7 +235,7 @@ def action(e, doc):
     if isinstance(e, pf.Header) and e.level < 4:
         return handleHeader(e, doc)
 
-    if isinstance(e, pf.Span) or isinstance(e, pf.Div):
+    if isinstance(e, (pf.Div, pf.Span)):
         return handleDivAndSpan(e, doc)
 
     if isinstance(e, pf.Header) and e.level == 4:
