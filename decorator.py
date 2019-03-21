@@ -142,14 +142,14 @@ class LaTeXDecorator(Decorator):
     def handleClassColorEmph(self):
         """Add new fontfamily.
         """
-        self.addPre("{"+TEX_COLOR_EMPH)
+        self.addPre("{"+self.TEX_COLOR_EMPH)
         self.addPost("}")
 
 
     def handleClassColorStrong(self):
         """Add new fontfamily.
         """
-        self.addPre("{"+TEX_COLOR_STRONG)
+        self.addPre("{"+self.TEX_COLOR_STRONG)
         self.addPost("}")
 
 
