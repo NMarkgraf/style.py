@@ -4,7 +4,7 @@
 """
   Quick-Typographie-Filter-Decorator-Class: decorator.py
 
-  (C)opyleft in 2018 by Norman Markgraf (nmarkgraf@hotmail.com)
+  (C)opyleft in 2018/19 by Norman Markgraf (nmarkgraf@hotmail.com)
 
   Release:
   ========
@@ -106,6 +106,8 @@ class LaTeXDecorator(Decorator):
     """
     TEX_CENTER_BEFORE = """\n\\begin{center}\n"""
     TEX_CENTER_AFTER = """\n\\end{center}\n"""
+    TEX_COLOR_EMPH = """\\cemph{}"""
+    TEX_COLOR_STRONG = """\\cstrong{}"""
     FORMAT = "latex"
 
     TEX_FONTFAMILY_TAG = {
@@ -135,6 +137,21 @@ class LaTeXDecorator(Decorator):
         """
         self.addPre("{\\" + self.TEX_FONTFAMILY_TAG[fontfamily] + "{}")
         self.addPost("}")
+
+
+    def handleClassColorEmph(self):
+        """Add new fontfamily.
+        """
+        self.addPre("{"+TEX_COLOR_EMPH)
+        self.addPost("}")
+
+
+    def handleClassColorStrong(self):
+        """Add new fontfamily.
+        """
+        self.addPre("{"+TEX_COLOR_STRONG)
+        self.addPost("}")
+
 
     def getRawBlock(self, txt):
         return pf.RawBlock(txt, format=self.FORMAT)
@@ -189,6 +206,12 @@ class LaTeXDecorator(Decorator):
     def handleDivAndSpan(self, elem):
         """Handle DIV and SPAN Blocks in LaTeX Context.
         """
+        if 'cemph' in elem.classes:
+            self.handleClassColorEmph()
+
+        if 'cstrong' in elem.classes:
+            self.handleClassColorStrong()
+
         for fontsize in self.FONTSIZECLASSES:
             if fontsize in elem.classes:
                 self.handleClassFontsize(fontsize)

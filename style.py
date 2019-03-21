@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.4.3)
+  style.py (Release: 0.4.5)
   ========-----------------
   A Quick-Typographie-Pandoc-Panflute-Filter.
 
@@ -19,6 +19,7 @@
   0.4.2 - 03.01.2019 (nm) - Bugfixe
   0.4.3 - 05.02.2019 (nm) - Fehler behoben.
   0.4.4 - 26.02.2019 (nm) - Kleinere Schönheitsupdates
+  0.4.5 - 21.03.2019 (nm) - Unterstürtzung für "cemph" und "cstrong".
 
 
   WICHTIG:
