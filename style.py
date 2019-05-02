@@ -4,6 +4,7 @@
 """
   style.py (Release: 0.5.0)
   ========-----------------
+  
   A Quick-Typographie-Pandoc-Panflute-Filter.
 
   (C)opyleft in 2018/19 by Norman Markgraf (nmarkgraf@hotmail.com)
