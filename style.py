@@ -262,12 +262,13 @@ def _finalize(doc):
     """
     
     logging.debug("Finalize doc!")
+    hdr_inc = "header-includes"
+    
     # Add header-includes if necessary
     if "header-includes" not in doc.metadata:
         if doc.get_metadata("output.beamer_presentation.includes") is None:
             logging.debug("No 'header-includes' nor `includes` ? Created 'header-includes'!")
             doc.metadata["header-includes"] = pf.MetaList()
-            hdr_inc = "header-includes"
         else:
             logging.ERROR("Found 'includes'! SAD THINK")
             exit(1)
@@ -279,10 +280,14 @@ def _finalize(doc):
     if not isinstance(doc.metadata[hdr_inc], pf.MetaList):
         logging.debug("The '"+hdr_inc+"' is not a list? Converted!")
         doc.metadata[hdr_inc] = pf.MetaList(doc.metadata[hdr_inc])
-
-    doc.metadata[hdr_inc].append(
-        pf.MetaInlines(pf.RawInline("\\usepackage{xspace}\n\\include{heaader.tex}", "latex"))
-    )
+        
+    if doc.format in ("tex", "latex", "beamer"):
+        doc.metadata[hdr_inc].append(
+            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", "latex"))
+        )
+        doc.metadata[hdr_inc].append(
+            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", "latex"))
+        )
 
 def main(doc=None):
     """Main function.
