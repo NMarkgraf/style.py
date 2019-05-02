@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.4.5)
+  style.py (Release: 0.5.0)
   ========-----------------
   A Quick-Typographie-Pandoc-Panflute-Filter.
 
@@ -20,6 +20,7 @@
   0.4.3 - 05.02.2019 (nm) - Fehler behoben.
   0.4.4 - 26.02.2019 (nm) - Kleinere Schönheitsupdates
   0.4.5 - 21.03.2019 (nm) - Unterstürtzung für "cemph" und "cstrong".
+  0.5   - 02.05.2019 (nm) - LaTeX Paket "xspace" und "header.tex" nun via finalize eingebunden!
 
 
   WICHTIG:
@@ -243,7 +244,7 @@ def action(e, doc):
         return handleHeaderBlockLevel(e, doc)
 
 
-def prepare(doc):
+def _prepare(doc):
     """Do nothing before action, but it is necessary for 'autofilter'.
 
     :param doc: current document
@@ -252,14 +253,35 @@ def prepare(doc):
     pass
 
 
-def finalize(doc):
-    """Do nothing after action, but it is necessary for 'autofilter'.
+def _finalize(doc):
+    """Add "\\usepackage{xspace}" to header-includes
 
     :param doc: current document
     :return: current document
     """
-    pass
+    
+    logging.debug("Finalize doc!")
+    # Add header-includes if necessary
+    if "header-includes" not in doc.metadata:
+        if doc.get_metadata("output.beamer_presentation.includes") is None:
+            logging.debug("No 'header-includes' nor `includes` ? Created 'header-includes'!")
+            doc.metadata["header-includes"] = pf.MetaList()
+            hdr_inc = "header-includes"
+        else:
+            logging.ERROR("Found 'includes'! SAD THINK")
+            exit(1)
 
+    # Convert header-includes to MetaList if necessary
+
+    logging.debug("Append background packages to `header-includes`")
+
+    if not isinstance(doc.metadata[hdr_inc], pf.MetaList):
+        logging.debug("The '"+hdr_inc+"' is not a list? Converted!")
+        doc.metadata[hdr_inc] = pf.MetaList(doc.metadata[hdr_inc])
+
+    doc.metadata[hdr_inc].append(
+        pf.MetaInlines(pf.RawInline("\\usepackage{xspace}\n\\include{heaader.tex}", "latex"))
+    )
 
 def main(doc=None):
     """Main function.
@@ -271,8 +293,8 @@ def main(doc=None):
     """
     logging.debug("Start pandoc filter 'style.py'")
     ret = pf.run_filter(action,
-                         prepare=prepare,
-                         finalize=finalize,
+                         prepare=_prepare,
+                         finalize=_finalize,
                          doc=doc) 
     logging.debug("End pandoc filter 'style.py'")
     return ret

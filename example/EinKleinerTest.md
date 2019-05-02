@@ -4,8 +4,6 @@ author: "Norman Markgraf"
 date: "28 Oktober 2018"
 output:
   beamer_presentation:
-    includes:
-      in_header: header.tex
     keep_tex: yes
     md_extensions: +raw_tex+header_attributes+fenced_divs+bracketed_spans
     pandoc_args:
