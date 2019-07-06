@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.5.0)
+  style.py (Release: 0.5.1)
   ========-----------------
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
@@ -22,6 +22,7 @@
   0.4.4 - 26.02.2019 (nm) - Kleinere Schönheitsupdates
   0.4.5 - 21.03.2019 (nm) - Unterstürtzung für "cemph" und "cstrong".
   0.5   - 02.05.2019 (nm) - LaTeX Paket "xspace" und "header.tex" nun via finalize eingebunden!
+  0.5.1 - 06.07.2019 (nm) - Bugfix für PDF Dokumente.
 
 
   WICHTIG:
@@ -130,8 +131,8 @@ blocktag = None
 def setDecorator(doc):
     global dec
 
-    if doc.format in ["latex", "beamer"]:
-        dec = LaTeXDecorator()
+    if doc.format in ["latex", "beamer", "tex"]:
+        dec = LaTeXDecorator(doc.format)
 
     if doc.format == "html":
         dec = HTMLDecorator()
@@ -283,10 +284,10 @@ def _finalize(doc):
         
     if doc.format in ("tex", "latex", "beamer"):
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", "latex"))
+            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", doc.format))
         )
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", "latex"))
+            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", doc.format))
         )
 
 def main(doc=None):

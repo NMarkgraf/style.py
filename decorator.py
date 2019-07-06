@@ -110,6 +110,7 @@ class LaTeXDecorator(Decorator):
     TEX_COLOR_STRONG = """\\cstrong{}"""
     FORMAT = "latex"
 
+
     TEX_FONTFAMILY_TAG = {
         "normalfont": "normalfont",
         "romanfont": "rmfamily",
@@ -119,6 +120,10 @@ class LaTeXDecorator(Decorator):
         "italic": "itshape",
         "smallcaps": "scshape",
         "upright": "upshape"}
+        
+    def __init__(self, format="latex"):
+        super().__init__()
+        self.FOMRAT = format
         
     def handleClassCenter(self):
         """ Add center environment
