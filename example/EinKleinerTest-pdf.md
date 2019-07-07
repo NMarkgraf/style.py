@@ -13,7 +13,7 @@ output:
 
 # Test
 
-## Ein paar Testsenarien
+## Ein paar Testszenarien (DIV-Blöcke)
 
 ::: {.center}
 Das ist mittig!
@@ -55,16 +55,24 @@ Das ist [ein kleiner]{.small} [GROSSER]{.Large} Test!
 
 ## Justified Alignments
 
-::: {.tiny}
+All small:
+
+::: {.small}
 Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur, weil er Schmerz ist, es sei denn, es kommt zu zufälligen Umständen, in denen Mühen und Schmerz ihm große Freude bereiten können.
+
+Justified Left:
 
 ::: {.justifiedleft}
 Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen? Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus resultierende Freude nach sich zieht? 
 :::
 
+Justified Right:
+
 ::: {.justifiedright}
 Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur, weil er Schmerz ist, es sei denn, es kommt zu zufälligen Umständen, in denen Mühen und Schmerz ihm große Freude bereiten können. Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen? 
 :::
+
+Normal, but small:
 
 Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus resultierende Freude nach sich zieht?Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur,
 
@@ -77,24 +85,3 @@ Berechnen Sie die folgenden Aufgaben:
 - $1+2+3+4=\;$[$10$]{.solution type=2-}
 - $2+3+4+5=\;$[$14$]{.solution type=3-}
 
-
-# Nun einmal ein Sinnspruch im Section-Title!
-
-::: {.Sinnspruch}
-Das hier ist ein Sinnspruch und sollte als solcher.
-
-Auch genau so behandelt werden.
-
-[-- Norman Markgraf]{.Quelle}
-:::
-
-
-## Ein Sinnspruch im normalen Frame
-
-::: {.Sinnspruch}
-Das hier ist ein Sinnspruch und sollte als solcher.
-
-Auch genau so behandelt werden.
-
-[-- Norman Markgraf]{.Quelle}
-:::

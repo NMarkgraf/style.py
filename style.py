@@ -131,8 +131,12 @@ blocktag = None
 def setDecorator(doc):
     global dec
 
-    if doc.format in ["latex", "beamer", "tex"]:
-        dec = LaTeXDecorator(doc.format)
+    if doc.format in ["latex", "beamer"]:
+        dec = LaTeXDecorator("latex")
+
+    if doc.format == "tex":
+        dec = LaTeXDecorator("tex")
+
 
     if doc.format == "html":
         dec = HTMLDecorator()
@@ -282,12 +286,17 @@ def _finalize(doc):
         logging.debug("The '"+hdr_inc+"' is not a list? Converted!")
         doc.metadata[hdr_inc] = pf.MetaList(doc.metadata[hdr_inc])
         
+    if doc.format in ("latex", "beamer"):
+      format = "latex"
+    if doc.format == "tex":
+      format = "tex"
+      
     if doc.format in ("tex", "latex", "beamer"):
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", doc.format))
+            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", format))
         )
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", doc.format))
+            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", format))
         )
 
 def main(doc=None):

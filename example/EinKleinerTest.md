@@ -22,7 +22,7 @@ output:
 
 # Test
 
-## Ein paar Testsenarien
+## Ein paar Testszenarien
 
 ::: {.center}
 Das ist mittig!

@@ -123,7 +123,7 @@ class LaTeXDecorator(Decorator):
         
     def __init__(self, format="latex"):
         super().__init__()
-        self.FOMRAT = format
+        self.FORMAT = format
         
     def handleClassCenter(self):
         """ Add center environment
