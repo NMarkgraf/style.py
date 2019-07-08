@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.5.2)
+  style.py (Release: 0.6.0)
   ========-----------------
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
@@ -21,9 +21,10 @@
   0.4.3 - 05.02.2019 (nm) - Fehler behoben.
   0.4.4 - 26.02.2019 (nm) - Kleinere Schönheitsupdates
   0.4.5 - 21.03.2019 (nm) - Unterstürtzung für "cemph" und "cstrong".
-  0.5   - 02.05.2019 (nm) - LaTeX Paket "xspace" und "header.tex" nun via finalize eingebunden!
+  0.5.0 - 02.05.2019 (nm) - LaTeX Paket "xspace" und "header.tex" nun via finalize eingebunden!
   0.5.1 - 06.07.2019 (nm) - Bugfix für PDF Dokumente.
   0.5.2 - 08.07.2019 (nm) - Leichte Code Anpassungen.
+  0.6.0 - 08.07.2019 (nm) - Code-Refaktor
 
 
   WICHTIG:
@@ -56,10 +57,9 @@
 
 """
 
-
-import panflute as pf  # panflute fuer den pandoc AST
 import logging  # logging fuer die 'typography.log'-Datei
 import os as os  # check if file exists.
+
 from decorator import *
 
 """
@@ -70,7 +70,7 @@ from decorator import *
  
  der level für das logging extern ausgewählt werden.
 """
-if os.path.exists("style.loglevel.debug"): 
+if os.path.exists("style.loglevel.debug"):
     DEBUGLEVEL = logging.DEBUG
 elif os.path.exists("style.loglevel.info"):
     DEBUGLEVEL = logging.INFO
@@ -80,13 +80,13 @@ elif os.path.exists("style.loglevel.error"):
     DEBUGLEVEL = logging.ERROR
 else:
     DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
-    
+
 logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
 """
  LaTeX Fontsize commands in beamer:
- \tiny, \scriptsize, \footnotesize, \small, \normalsize (default),
- \large, \Large, \LARGE, \huge and \Huge.
+ \\tiny, \\scriptsize, \\footnotesize, \\small, \\normalsize (default),
+ \\large, \\Large, \\LARGE, \\huge and \\Huge.
 
  Handle Classes ".tiny", ".scriptsize", ".footnotesize", ".small",
                 ".normalsize" (default), "large", ".Large",
@@ -123,13 +123,12 @@ TEX_BLOCKCLASSES_TAG = {
     "facts": "Fakten"
 }
 
-
 dec = Decorator()
 
 blocktag = None
 
 
-def setDecorator(doc):
+def set_decorator(doc):
     global dec
 
     if doc.format in ["latex", "beamer"]:
@@ -145,47 +144,47 @@ def setDecorator(doc):
         dec = HTMLDecorator()
 
 
-def handleDiv(e):
+def handle_div(e):
     """
     Handle DIV Blocks only
     """
 
 
-def handleDivAndSpan(e, doc):
+def handle_div_and_span(e, doc):
     """
      Handle DIV and SPAN Blocks in gerneral
     """
 
     global dec
 
-    setDecorator(doc)
+    set_decorator(doc)
 
-    dec.handleDiv(e)
-    dec.handleSpan(e)
-    dec.handleDivAndSpan(e)
+    dec.handle_div(e)
+    dec.handle_span(e)
+    dec.handle_div_and_span(e)
 
-    if dec.hasPrePost():
+    if dec.has_pre_post():
         before = after = ""
         if isinstance(e, pf.Div):
-            before = dec.getBeforeBlock()
-            after = dec.getAfterBlock()
+            before = dec.get_before_block()
+            after = dec.get_after_block()
 
         if isinstance(e, pf.Span):
-            before = dec.getBeforeInline()
-            after = dec.getAfterInline()
+            before = dec.get_before_inline()
+            after = dec.get_after_inline()
 
         e.content = [before] + list(e.content) + [after]
         return e
 
 
-def handleHeaderLevelOne(e, doc):
+def handle_header_level_one(e, doc):
     """Future work!
     """
     if isinstance(e.next, pf.Div) and ("Sinnspruch" in e.next.classes):
         logging.debug("We have work to do!")
 
 
-def handleHeaderBlockLevel(e, doc):
+def handle_header_block_level(e, doc):
     """
 
     :param e:
@@ -197,12 +196,12 @@ def handleHeaderBlockLevel(e, doc):
     blocktag = None
     before = None
     if tag:
-        before = pf.RawBlock("\\end{"+tag+"}\n", "latex")
+        before = pf.RawBlock("\\end{" + tag + "}\n", "latex")
         if "endblock" in e.classes:
             return before
 
     for blocktype in BLOCKCLASSES:
-        if blocktype in e.classes: 
+        if blocktype in e.classes:
             logging.debug("BLOCKTYPE:" + blocktype)
             if not isinstance(e.content, pf.ListContainer):
                 logging.debug("CONTENT:" + pf.stringify(e.content))
@@ -210,10 +209,10 @@ def handleHeaderBlockLevel(e, doc):
                 elem = pf.Div()
                 elem.content = [
                     pf.Plain(
-                        pf.RawInline("\n\\begin{"+tag+"}[", "latex"),
+                        pf.RawInline("\n\\begin{" + tag + "}[", "latex"),
                         e.content,
                         pf.RawInline("]\n", "latex")
-                        )
+                    )
                 ]
 
                 blocktag = tag
@@ -225,7 +224,7 @@ def handleHeaderBlockLevel(e, doc):
                 logging.debug("CONTENT: Listcontainer")
 
 
-def handleHeader(e, doc):
+def handle_header(e, doc):
     """
 
     :param e:
@@ -235,22 +234,28 @@ def handleHeader(e, doc):
     global blocktag
     tag = blocktag
     blocktag = None
+    frmt = doc.format
+
+    if doc.format in ("latex", "beamer"):
+        frmt = "latex"
+
     if "endblock" in e.classes:
-        return pf.RawBlock("\\end{"+tag+"}\n")
+        return pf.RawBlock("\\end{" + str(tag) + "}\n", frmt)
     if tag:
-        return [pf.RawBlock("\\end{"+tag+"}\n", "latex"), e]
+        return [pf.RawBlock("\\end{" + str(tag) + "}\n", frmt), e]
+
 
 def action(e, doc):
     """Main action function for panflute.
     """
     if isinstance(e, pf.Header) and e.level < 4:
-        return handleHeader(e, doc)
+        return handle_header(e, doc)
 
     if isinstance(e, (pf.Div, pf.Span)):
-        return handleDivAndSpan(e, doc)
+        return handle_div_and_span(e, doc)
 
     if isinstance(e, pf.Header) and e.level == 4:
-        return handleHeaderBlockLevel(e, doc)
+        return handle_header_block_level(e, doc)
 
 
 def _prepare(doc):
@@ -268,10 +273,10 @@ def _finalize(doc):
     :param doc: current document
     :return: current document
     """
-    
+
     logging.debug("Finalize doc!")
     hdr_inc = "header-includes"
-    
+
     # Add header-includes if necessary
     if "header-includes" not in doc.metadata:
         if doc.get_metadata("output.beamer_presentation.includes") is None:
@@ -286,21 +291,22 @@ def _finalize(doc):
     logging.debug("Append background packages to `header-includes`")
 
     if not isinstance(doc.metadata[hdr_inc], pf.MetaList):
-        logging.debug("The '"+hdr_inc+"' is not a list? Converted!")
+        logging.debug("The '" + hdr_inc + "' is not a list? Converted!")
         doc.metadata[hdr_inc] = pf.MetaList(doc.metadata[hdr_inc])
-        
+
+    frmt = doc.format
+
     if doc.format in ("latex", "beamer"):
-        format = "latex"
-    if doc.format == "tex":
-        format = "tex"
-      
+        frmt = "latex"
+
     if doc.format in ("tex", "latex", "beamer"):
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", format))
+            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", frmt))
         )
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", format))
+            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", frmt))
         )
+
 
 def main(doc=None):
     """Main function.
@@ -311,11 +317,11 @@ def main(doc=None):
     :return: parsed document
     """
     logging.debug("Start pandoc filter 'style.py'")
-    
+
     ret = pf.run_filter(action,
-                         prepare=_prepare,
-                         finalize=_finalize,
-                         doc=doc)
+                        prepare=_prepare,
+                        finalize=_finalize,
+                        doc=doc)
     logging.debug("End pandoc filter 'style.py'")
     return ret
 

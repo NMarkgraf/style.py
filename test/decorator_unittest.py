@@ -8,7 +8,8 @@
   Release:
   ========
   0.1   - 28.03.2018 (nm) - Erste Version
-  0.2   - 28.10.2018 (nm) - EIn weitere Test hinzugefügt.
+  0.2   - 28.10.2018 (nm) - Ein weitere Test hinzugefügt.
+  0.3   - 08.07.2019 (nm) - Code Refaktor
 
 
   WICHTIG:
@@ -57,43 +58,43 @@ from decorator import *
 
 class DecoratorTest(unittest.TestCase):
 
-    def test_addAndgetPre(self):
+    def test_add_and_get_pre(self):
         pre = "xxx"
         dec = Decorator()
-        dec.addPre(pre)
-        self.assertEqual(dec.getPre(), pre)
+        dec.add_pre(pre)
+        self.assertEqual(dec.get_pre(), pre)
         del dec
         
 
-    def test_addAndgetPost(self):
+    def test_add_and_get_post(self):
         post = "xxx"
         dec = Decorator()
-        dec.addPost(post)
-        self.assertEqual(dec.getPost(), post)
+        dec.add_post(post)
+        self.assertEqual(dec.get_post(), post)
         del dec
     
-    def test_hasPrePostFalse(self):
+    def test_has_pre_post_false(self):
         dec = Decorator()
-        self.assertFalse(dec.hasPrePost())        
+        self.assertFalse(dec.has_pre_post())
         del dec
 
-    def test_hasPrePostTrue(self):
+    def test_has_pre_post_true(self):
         dec = Decorator()
-        dec.addPre("xxx")
-        dec.addPost("yyy")
-        self.assertTrue(dec.hasPrePost())        
+        dec.add_pre("xxx")
+        dec.add_post("yyy")
+        self.assertTrue(dec.has_pre_post())
         del dec
 
-    def test_handleClassFontsizeLaTeX(self):
-        newFontsize = "XXXXX"
-        prepostAfter = "{\\" + newFontsize + "{}}"
+    def test_handle_class_fontsize_latex(self):
+        new_fontsize = "XXXXX"
+        prepost_after = "{\\" + new_fontsize + "{}}"
         dec = LaTeXDecorator()
-        dec.handleClassFontsize(newFontsize)
-        self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
+        dec.handle_class_fontsize(new_fontsize)
+        self.assertEqual(dec.get_pre() + dec.get_post(), prepost_after)
         del dec
 
 
-    def test_handleClassFontfamilyLaTeX(self):
+    def test_handle_class_fontfamily_latex(self):
         fontfamilies = {
             "normalfont": "normalfont",
             "romanfont": "rmfamily",
@@ -104,11 +105,11 @@ class DecoratorTest(unittest.TestCase):
             "smallcaps": "scshape",
             "upright": "upshape"}
             
-        for newFontfamily in fontfamilies:
-            prepostAfter = "{\\" + fontfamilies[newFontfamily] + "{}}"
+        for new_fontfamily in fontfamilies:
+            prepost_after = "{\\" + fontfamilies[new_fontfamily] + "{}}"
             dec = LaTeXDecorator()
-            dec.handleClassFontfamily(newFontfamily)
-            self.assertEqual(dec.getPre()+dec.getPost(), prepostAfter)
+            dec.handle_class_fontfamily(new_fontfamily)
+            self.assertEqual(dec.get_pre() + dec.get_post(), prepost_after)
             del dec
 
 

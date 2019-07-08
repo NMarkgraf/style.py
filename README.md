@@ -58,8 +58,8 @@ Mit
 kann man diese farbigen Herforhebungen deaktivieren. Mit
 
 ```
-\newcommand*{\cemph}{\textcolor{green}}
-\newcommand*{\cstrong}{\textcolor{red}}
+\newcommand*{\cemph}{\color{green}}
+\newcommand*{\cstrong}{\color{red}}
 ```
 
 wird der Text durch "\cemph" grün und mit "\cstrong" rot eingefärbt.
