@@ -77,13 +77,17 @@
   \title{Ein kleiner Test}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-    \author{Norman Markgraf}
+  \subtitle{Dokumenten-Fassung}
+  \author{Norman Markgraf}
     \preauthor{\centering\large\emph}
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{28 Oktober 2018}
+    \date{08 Juli 2019}
 
+\usepackage{xcolor}
+\newcommand{\cemph}{\color{green}}
+\newcommand{\cstrong}{\color{red}}
 \usepackage{xspace}
 \include{heaader.tex}
 
@@ -140,7 +144,11 @@ Das ist normaler Text!
 \hypertarget{nun-spans-statt-divs}{%
 \subsection{Nun Spans statt Divs}\label{nun-spans-statt-divs}}
 
-Das ist {{\small{}ein kleiner}} {{\Large{}GROSSER}} Test!
+Das ist {{\tiny{}ein sehr kleiner}}, {{\small{}kleiner}} und
+{{\Large{}ein GROSSER}} Test!
+
+Manchmal möchte man {{\cemph{}{\scriptsize{}klein und grün}}} und
+{{\cstrong{}{\huge{}groß und rot}}} schreiben.
 
 \hypertarget{alle-auf-einer-seite}{%
 \subsection{Alle auf einer Seite:}\label{alle-auf-einer-seite}}

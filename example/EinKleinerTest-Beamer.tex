@@ -1,0 +1,274 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Ein kleiner Test},
+  pdfauthor={Norman Markgraf},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{xcolor}
+\newcommand{\cemph}{\color{green}}
+\newcommand{\cstrong}{\color{red}}
+\usepackage{xspace}
+\include{heaader.tex}
+
+\title{Ein kleiner Test}
+\subtitle{Beamer - Fassung}
+\author{Norman Markgraf}
+\date{08 Juli 2019}
+
+\begin{document}
+\frame{\titlepage}
+
+\hypertarget{test}{%
+\section{Test}\label{test}}
+
+\begin{frame}{Ein paar Testszenarien}
+\protect\hypertarget{ein-paar-testszenarien}{}
+
+
+\begin{center}
+
+Das ist mittig!
+
+
+\end{center}
+
+Das ist normaler Text!
+
+{\Large{}
+
+Das ist GROSS!
+
+}
+
+Das ist normaler Text!
+
+
+\begin{center}
+{\Large{}
+
+Das ist GROSS!
+
+}
+\end{center}
+
+Das ist normaler Text!
+
+
+\begin{center}
+{\LARGE{}
+
+Das ist GROSS!
+
+}
+\end{center}
+
+Das ist normaler Text!
+
+\end{frame}
+
+\begin{frame}{Nun Spans statt Divs}
+\protect\hypertarget{nun-spans-statt-divs}{}
+
+Das ist {{\tiny{}ein sehr kleiner}}, {{\small{}kleiner}} und
+{{\Large{}ein GROSSER}} Test!
+
+Manchmal möchte man {{\cemph{}{\scriptsize{}klein und grün}}} und
+{{\cstrong{}{\huge{}groß und rot}}} schreiben.
+
+\end{frame}
+
+\begin{frame}{Alle auf einer Seite:}
+\protect\hypertarget{alle-auf-einer-seite}{}
+
+{{\tiny{}tiny}} {{\scriptsize{}scriptsize}}
+{{\footnotesize{}footnotesize}} {{\small{}small}} (default)
+{{\normalsize{}normalsize}} {{\Large{}large}} {{\Large{}Large}}
+{{\huge{}huge}} {{\Huge{}Huge}}
+
+{{\normalfont{}normal}} {{\rmfamily{}roman}} {{\sffamily{}sanserif}}
+{{\ttfamily{}teletype}} \textsc{smallcaps} {{\slshape{}slanted}}
+{{\upshape{}upright}} {{\itshape{}italic}}
+
+\end{frame}
+
+\begin{frame}{Justified Alignments}
+\protect\hypertarget{justified-alignments}{}
+
+{\tiny{}
+
+Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder
+wünscht, nur, weil er Schmerz ist, es sei denn, es kommt zu zufälligen
+Umständen, in denen Mühen und Schmerz ihm große Freude bereiten können.
+
+
+\begin{flushright}
+
+Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je
+anstrengender körperlicher Betätigung, außer um Vorteile daraus zu
+ziehen? Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die
+Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen
+Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus
+resultierende Freude nach sich zieht?
+
+
+\end{flushright}
+
+
+\begin{flushleft}
+
+Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder
+wünscht, nur, weil er Schmerz ist, es sei denn, es kommt zu zufälligen
+Umständen, in denen Mühen und Schmerz ihm große Freude bereiten können.
+Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je
+anstrengender körperlicher Betätigung, außer um Vorteile daraus zu
+ziehen?
+
+
+\end{flushleft}
+
+Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die
+Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen
+Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus
+resultierende Freude nach sich zieht?Auch gibt es niemanden, der den
+Schmerz an sich liebt, sucht oder wünscht, nur,
+
+}
+
+\end{frame}
+
+\begin{frame}{Lücken für Lösungen}
+\protect\hypertarget{lucken-fur-losungen}{}
+
+Berechnen Sie die folgenden Aufgaben:
+
+\begin{itemize}
+\tightlist
+\item
+  \(1+2+3+4=\;\){\(10\)}
+\item
+  \(2+3+4+5=\;\){\(14\)}
+\end{itemize}
+
+\end{frame}
+
+\hypertarget{nun-einmal-ein-sinnspruch-im-section-title}{%
+\section{Nun einmal ein Sinnspruch im
+Section-Title!}\label{nun-einmal-ein-sinnspruch-im-section-title}}
+
+\begin{frame}{Nun einmal ein Sinnspruch im Section-Title!}
+
+
+\begin{quote}\small{}
+
+Das hier ist ein Sinnspruch und sollte als solcher.
+
+Auch genau so behandelt werden.
+
+{
+{\scriptsize{} --\xspace{} -- Norman Markgraf}
+}
+
+\end{quote}
+
+\end{frame}
+
+\begin{frame}{Ein Sinnspruch im normalen Frame}
+\protect\hypertarget{ein-sinnspruch-im-normalen-frame}{}
+
+
+\begin{quote}\small{}
+
+Das hier ist ein Sinnspruch und sollte als solcher.
+
+Auch genau so behandelt werden.
+
+{
+{\scriptsize{} --\xspace{} -- Norman Markgraf}
+}
+
+\end{quote}
+
+\end{frame}
+
+\end{document}

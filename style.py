@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.5.1)
+  style.py (Release: 0.5.2)
   ========-----------------
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
@@ -23,6 +23,7 @@
   0.4.5 - 21.03.2019 (nm) - Unterstürtzung für "cemph" und "cstrong".
   0.5   - 02.05.2019 (nm) - LaTeX Paket "xspace" und "header.tex" nun via finalize eingebunden!
   0.5.1 - 06.07.2019 (nm) - Bugfix für PDF Dokumente.
+  0.5.2 - 08.07.2019 (nm) - Leichte Code Anpassungen.
 
 
   WICHTIG:
@@ -137,6 +138,8 @@ def setDecorator(doc):
     if doc.format == "tex":
         dec = LaTeXDecorator("tex")
 
+    if doc.format == "context":
+        dec = LaTeXDecorator("context")
 
     if doc.format == "html":
         dec = HTMLDecorator()
@@ -287,9 +290,9 @@ def _finalize(doc):
         doc.metadata[hdr_inc] = pf.MetaList(doc.metadata[hdr_inc])
         
     if doc.format in ("latex", "beamer"):
-      format = "latex"
+        format = "latex"
     if doc.format == "tex":
-      format = "tex"
+        format = "tex"
       
     if doc.format in ("tex", "latex", "beamer"):
         doc.metadata[hdr_inc].append(
@@ -308,10 +311,11 @@ def main(doc=None):
     :return: parsed document
     """
     logging.debug("Start pandoc filter 'style.py'")
+    
     ret = pf.run_filter(action,
                          prepare=_prepare,
                          finalize=_finalize,
-                         doc=doc) 
+                         doc=doc)
     logging.debug("End pandoc filter 'style.py'")
     return ret
 
