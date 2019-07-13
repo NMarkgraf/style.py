@@ -5,6 +5,7 @@ author: "Norman Markgraf"
 date: "08 Juli 2019"
 header-includes:
   - "`\\usepackage{xcolor}`{=latex}"
+  - "\\include{moreblocks}"
   - "`\\newcommand{\\cemph}{\\color{green}}`{=latex}"
   - "`\\newcommand{\\cstrong}{\\color{red}}`{=latex}"
 output:
@@ -114,3 +115,32 @@ Auch genau so behandelt werden.
 
 [-- Norman Markgraf]{.Quelle}
 :::
+
+
+## Ein paar der alten "moreblock" Sachen (I/II)
+
+### von Düsterloh {.theorem}
+
+Das Niveau hat keine untere Schranke.
+
+### des Satzes von Düsterloh {.proof}
+Donald Trump.
+
+### Notwendig dafür ist {.remark}
+Das wir "moreblock.tex" einbinden!
+
+### {.example}
+Das Beispiel sehen wir hier!
+
+## Ein paar der alten "moreblock" Sachen (II/II)
+
+### {.definition}
+Es ist, also muss es!
+
+### {.exercise}
+Eine Übung zur rechten Zeit, und wir wissen was übrig bleibt.
+
+### {.fact}
+Das ist so. Das bleibt so.
+
+## Ende!

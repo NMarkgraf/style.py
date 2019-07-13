@@ -11,4 +11,5 @@ example/EinKleinerTest.toc
 example/sytle.log
 *Old.py
 *.pyc
+*.aux
 .idea/

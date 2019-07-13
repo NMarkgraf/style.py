@@ -25,6 +25,7 @@
   0.5.1 - 06.07.2019 (nm) - Bugfix für PDF Dokumente.
   0.5.2 - 08.07.2019 (nm) - Leichte Code Anpassungen.
   0.6.0 - 08.07.2019 (nm) - Code-Refaktor
+  0.6.1 - 13.07.2019 (nm) - Die "moreblocks" Idee langsam integrieren.
 
 
   WICHTIG:
@@ -127,6 +128,8 @@ dec = Decorator()
 
 blocktag = None
 
+slidelevel = 2
+
 
 def set_decorator(doc):
     global dec
@@ -191,20 +194,23 @@ def handle_header_block_level(e, doc):
     :param doc:
     :return:
     """
+    logging.debug("handle_header_block_level")
     global blocktag
     tag = blocktag
     blocktag = None
     before = None
     if tag:
+        logging.debug("handle_header_block_level: closing previose tag <"+tag+">")
         before = pf.RawBlock("\\end{" + tag + "}\n", "latex")
         if "endblock" in e.classes:
             return before
 
     for blocktype in BLOCKCLASSES:
+        logging.debug("handle_header_block_level: probing blocktype <"+blocktype+">")
         if blocktype in e.classes:
-            logging.debug("BLOCKTYPE:" + blocktype)
+            logging.debug("handle_header_block_level: found <"+blocktype+"> in e.classes!")
             if not isinstance(e.content, pf.ListContainer):
-                logging.debug("CONTENT:" + pf.stringify(e.content))
+                logging.debug("handle_header_block_level: content ->" + pf.stringify(e.content))
                 tag = TEX_BLOCKCLASSES_TAG[blocktype]
                 elem = pf.Div()
                 elem.content = [
@@ -221,7 +227,23 @@ def handle_header_block_level(e, doc):
                     return [before, elem]
                 return elem
             else:
-                logging.debug("CONTENT: Listcontainer")
+                logging.debug("handle_header_block_level: content -> Listcontainer!")
+                tag = TEX_BLOCKCLASSES_TAG[blocktype]
+                elem = pf.Div()
+                if len(e.content) > 0:
+                    elem.content = [
+                            pf.RawBlock("\n\\begin{" + tag + "}["+pf.stringify(e)+"]\n", "latex")
+                    ]
+                else:
+                    elem.content = [
+                            pf.RawBlock("\n\\begin{" + tag + "}\n", "latex")
+                    ]
+
+                blocktag = tag
+
+                if before:
+                    return [before, elem]
+                return elem
 
 
 def handle_header(e, doc):
@@ -241,6 +263,7 @@ def handle_header(e, doc):
 
     if "endblock" in e.classes:
         return pf.RawBlock("\\end{" + str(tag) + "}\n", frmt)
+        
     if tag:
         return [pf.RawBlock("\\end{" + str(tag) + "}\n", frmt), e]
 
@@ -248,14 +271,20 @@ def handle_header(e, doc):
 def action(e, doc):
     """Main action function for panflute.
     """
-    if isinstance(e, pf.Header) and e.level < 4:
-        return handle_header(e, doc)
+    global slidelevel
+    
+    # logging.debug("action: slidelevel="+str(slidelevel))
+    
+    if isinstance(e, pf.Header):
+        if e.level <= slidelevel:
+            return handle_header(e, doc)
 
     if isinstance(e, (pf.Div, pf.Span)):
         return handle_div_and_span(e, doc)
 
-    if isinstance(e, pf.Header) and e.level == 4:
-        return handle_header_block_level(e, doc)
+    if isinstance(e, pf.Header):
+        if e.level > slidelevel:
+            return handle_header_block_level(e, doc)
 
 
 def _prepare(doc):
@@ -264,7 +293,8 @@ def _prepare(doc):
     :param doc: current document
     :return: current document
     """
-    pass
+    global slidelevel
+    slidelevel = int(doc.get_metadata('slide-level', 2))
 
 
 def _finalize(doc):
@@ -283,7 +313,7 @@ def _finalize(doc):
             logging.debug("No 'header-includes' nor `includes` ? Created 'header-includes'!")
             doc.metadata["header-includes"] = pf.MetaList()
         else:
-            logging.ERROR("Found 'includes'! SAD THINK")
+            logging.error("Found 'includes'! SAD THINK")
             exit(1)
 
     # Convert header-includes to MetaList if necessary
@@ -304,7 +334,7 @@ def _finalize(doc):
             pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", frmt))
         )
         doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\include{heaader.tex}", frmt))
+            pf.MetaInlines(pf.RawInline("\\include{header.tex}", frmt))
         )
 
 
