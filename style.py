@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.6.2)
+  style.py (Release: 0.6.3)
   ========-----------------
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
@@ -27,6 +27,7 @@
   0.6.0 - 08.07.2019 (nm) - Code-Refaktor
   0.6.1 - 13.07.2019 (nm) - Die "moreblocks" Idee langsam integrieren.
   0.6.2 - 17.07.2019 (nm) - Bugfix. - "slide_level" wird nun korrekt ausgelesen.
+  0.6.3 - 17.07.2019 (nm) - Man sollte mit `dict` umgehen können. ;-)
 
 
   WICHTIG:
@@ -98,19 +99,6 @@ FONTSIZECLASSES = (
     "tiny", "scriptsize", "footnotesize", "small",
     "normalsize", "large", "Large",
     "LARGE", "huge", "Huge")
-
-BLOCKCLASSES = {
-    "theorem",
-    "example",
-    "examples",
-    "definition",
-    "proof",
-    "remark",
-    "remarks",
-    "exercise",
-    "fact",
-    "facts"
-}
 
 TEX_BLOCKCLASSES_TAG = {
     "theorem": "Satz",
@@ -213,7 +201,7 @@ def handle_header_block_level(e, doc):
         if "endblock" in e.classes:
               return before
 
-    for blocktype in BLOCKCLASSES:
+    for blocktype in TEX_BLOCKCLASSES_TAG:
         logging.debug("handle_header_block_level: probing blocktype <"+blocktype+">")
         if blocktype in e.classes:
             logging.debug("handle_header_block_level: found <"+blocktype+"> in e.classes!")
