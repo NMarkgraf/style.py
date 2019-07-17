@@ -143,4 +143,8 @@ Eine Übung zur rechten Zeit, und wir wissen was übrig bleibt.
 ### {.fact}
 Das ist so. Das bleibt so.
 
+### $<$ $>$ $\leq$ {.example}
+
+Ein etwas anderer Test!
+
 ## Ende!

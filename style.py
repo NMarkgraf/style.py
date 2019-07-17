@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.6.0)
+  style.py (Release: 0.6.2)
   ========-----------------
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
@@ -26,6 +26,7 @@
   0.5.2 - 08.07.2019 (nm) - Leichte Code Anpassungen.
   0.6.0 - 08.07.2019 (nm) - Code-Refaktor
   0.6.1 - 13.07.2019 (nm) - Die "moreblocks" Idee langsam integrieren.
+  0.6.2 - 17.07.2019 (nm) - Bugfix. - "slide_level" wird nun korrekt ausgelesen.
 
 
   WICHTIG:
@@ -80,7 +81,7 @@ elif os.path.exists("style.loglevel.warning"):
 elif os.path.exists("style.loglevel.error"):
     DEBUGLEVEL = logging.ERROR
 else:
-    DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
+    DEBUGLEVEL = logging.DEBUG  # .ERROR or .DEBUG  or .INFO
 
 logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
@@ -194,56 +195,46 @@ def handle_header_block_level(e, doc):
     :param doc:
     :return:
     """
-    logging.debug("handle_header_block_level")
+    logging.debug("handle_header_block_level: level="+str(e.level)+" classes="+str(e.classes))
     global blocktag
     tag = blocktag
     blocktag = None
     before = None
+    
+    if not e.classes:
+        logging.debug("handle_header_block_level: no classes!")
+        return
+
+    elem = e
+
     if tag:
         logging.debug("handle_header_block_level: closing previose tag <"+tag+">")
         before = pf.RawBlock("\\end{" + tag + "}\n", "latex")
         if "endblock" in e.classes:
-            return before
+              return before
 
     for blocktype in BLOCKCLASSES:
         logging.debug("handle_header_block_level: probing blocktype <"+blocktype+">")
         if blocktype in e.classes:
             logging.debug("handle_header_block_level: found <"+blocktype+"> in e.classes!")
             if not isinstance(e.content, pf.ListContainer):
-                logging.debug("handle_header_block_level: content ->" + pf.stringify(e.content))
-                tag = TEX_BLOCKCLASSES_TAG[blocktype]
-                elem = pf.Div()
-                elem.content = [
-                    pf.Plain(
-                        pf.RawInline("\n\\begin{" + tag + "}[", "latex"),
-                        e.content,
-                        pf.RawInline("]\n", "latex")
-                    )
-                ]
-
-                blocktag = tag
-
-                if before:
-                    return [before, elem]
-                return elem
+                logging.debug("handle_header_block_level: content is not ListContainer->" + pf.stringify(e.content))
             else:
-                logging.debug("handle_header_block_level: content -> Listcontainer!")
+                logging.debug("handle_header_block_level: content is Listcontainer!")
                 tag = TEX_BLOCKCLASSES_TAG[blocktype]
-                elem = pf.Div()
-                if len(e.content) > 0:
-                    elem.content = [
-                            pf.RawBlock("\n\\begin{" + tag + "}["+pf.stringify(e)+"]\n", "latex")
-                    ]
-                else:
-                    elem.content = [
-                            pf.RawBlock("\n\\begin{" + tag + "}\n", "latex")
-                    ]
-
                 blocktag = tag
+                if len(e.content) > 0:
+                    elem = pf.Div()
+                    elem.content.append(pf.Plain(*e.content))
+                    first_child = elem.content[0]
+                    first_child.content.insert(0, pf.RawInline("\n\\begin{" + tag + "}[", "latex"))
+                    first_child.content.append(pf.RawInline("]\n", "latex"))
+                else:
+                    elem = pf.RawBlock("\n\\begin{" + tag + "}\n", "latex")
 
-                if before:
-                    return [before, elem]
-                return elem
+    if before:
+        return [before, elem]
+    return elem
 
 
 def handle_header(e, doc):
@@ -273,7 +264,9 @@ def action(e, doc):
     """
     global slidelevel
     
-    # logging.debug("action: slidelevel="+str(slidelevel))
+    logging.debug("action: slidelevel="+str(slidelevel))
+    if isinstance(e, pf.Header):
+        logging.debug("action: is Header with level="+str(e.level))
     
     if isinstance(e, pf.Header):
         if e.level <= slidelevel:
@@ -294,7 +287,8 @@ def _prepare(doc):
     :return: current document
     """
     global slidelevel
-    slidelevel = int(doc.get_metadata('slide-level', 2))
+    logging.debug(doc.get_metadata("output", "<-NIX->"))
+    slidelevel = int(doc.get_metadata('output.beamer_presentation.slide_level', 2))
 
 
 def _finalize(doc):
