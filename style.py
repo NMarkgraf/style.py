@@ -81,7 +81,7 @@ elif os.path.exists("style.loglevel.warning"):
 elif os.path.exists("style.loglevel.error"):
     DEBUGLEVEL = logging.ERROR
 else:
-    DEBUGLEVEL = logging.DEBUG  # .ERROR or .DEBUG  or .INFO
+    DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
 
 logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
