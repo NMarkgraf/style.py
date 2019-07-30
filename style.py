@@ -27,7 +27,7 @@
   0.6.0 - 08.07.2019 (nm) - Code-Refaktor
   0.6.1 - 13.07.2019 (nm) - Die "moreblocks" Idee langsam integrieren.
   0.6.2 - 17.07.2019 (nm) - Bugfix. - "slide_level" wird nun korrekt ausgelesen.
-  0.6.3 - 17.07.2019 (nm) - Man sollte mit `dict` umgehen können. ;-)
+  0.6.3 - 30.07.2019 (nm) - .spacing mit top und bottom eingebaut.
 
 
   WICHTIG:

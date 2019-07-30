@@ -78,7 +78,7 @@ class Decorator:
         return self.post
 
     def has_pre_post(self):
-        return (self.pre != "") and (self.post != "")
+        return (self.pre != "") or (self.post != "")
 
     def handle_class_center(self):
         pass
@@ -188,8 +188,23 @@ class LaTeXDecorator(Decorator):
         if alignment == "center":
             self.handle_class_center()
 
+    def handle_class_spacing_in_div(self, attrib=[]):
+        if 'top' in attrib:
+            width = attrib["top"]
+            if width == "fill":
+                self.add_pre("\n\\vfill\n")
+            else:
+                self.add_pre("\n\\vspace*{"+width+"}\n")
+
+        if 'bottom' in attrib:
+            width = attrib["bottom"]
+            if width == "fill":
+                self.add_pre("\n\\vfill\n")
+            else:
+                self.add_post("\n\\vspace*{"+width+"}\n")
+
     def handle_div(self, elem):
-        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """Handle DIV Blocks in LaTeX Context.
         """
         if 'center' in elem.classes:
             self.handle_class_center()
@@ -199,9 +214,12 @@ class LaTeXDecorator(Decorator):
 
         if 'justifiedright' in elem.classes:
             self.handle_class_justified_in_div("right")
+            
+        if 'spaceing' in elem.classes:
+            self.handle_class_spacing_in_div(elem.attributes)
 
     def handle_span(self, elem):
-        """Handle DIV and SPAN Blocks in LaTeX Context.
+        """Handle SPAN Blocks in LaTeX Context.
         """
 
     def handle_div_and_span(self, elem):
