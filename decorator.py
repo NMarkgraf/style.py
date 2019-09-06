@@ -99,6 +99,8 @@ class Decorator:
     def handle_div_and_span(self, elem):
         pass
 
+    def handle_comments(self, elem):
+        pass
 
 class LaTeXDecorator(Decorator):
     """

@@ -89,8 +89,9 @@
 \include{moreblocks}
 \newcommand{\cemph}{\color{green}}
 \newcommand{\cstrong}{\color{red}}
+\usepackage[german=quotes]{csquotes}
 \usepackage{xspace}
-\include{header.tex}
+\InputIfFileExists{header.tex}{\relax}{\relax}
 
 \title{Ein kleiner Test}
 \subtitle{Beamer - Fassung}
@@ -272,7 +273,7 @@ Auch genau so behandelt werden.
 
 \end{frame}
 
-\begin{frame}{Ein paar der alten ``moreblock'' Sachen (I/II)}
+\begin{frame}{Ein paar der alten \enquote{moreblock} Sachen (I/II)}
 \protect\hypertarget{ein-paar-der-alten-moreblock-sachen-iii}{}
 
 
@@ -292,7 +293,7 @@ Donald Trump.
 
 \begin{Bemerkung}[Notwendig dafür ist]
 
-Das wir ``moreblock.tex'' einbinden!
+Das wir \enquote{moreblock.tex} einbinden!
 
 \end{Bemerkung}
 
@@ -305,7 +306,7 @@ Das Beispiel sehen wir hier!
 
 \end{frame}
 
-\begin{frame}{Ein paar der alten ``moreblock'' Sachen (II/II)}
+\begin{frame}{Ein paar der alten \enquote{moreblock} Sachen (II/II)}
 \protect\hypertarget{ein-paar-der-alten-moreblock-sachen-iiii}{}
 
 

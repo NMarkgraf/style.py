@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  style.py (Release: 0.6.3)
+  style.py (Release: 0.6.4)
   ========-----------------
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
@@ -27,7 +27,8 @@
   0.6.0 - 08.07.2019 (nm) - Code-Refaktor
   0.6.1 - 13.07.2019 (nm) - Die "moreblocks" Idee langsam integrieren.
   0.6.2 - 17.07.2019 (nm) - Bugfix. - "slide_level" wird nun korrekt ausgelesen.
-  0.6.3 - 17.07.2019 (nm) - Man sollte mit `dict` umgehen können. ;-)
+  0.6.3 - 30.07.2019 (nm) - .spacing mit top und bottom eingebaut.
+  0.6.4 - 06.07.2019 (nm) - Umgang mit "HTML-Kommentaren" verbessern.
 
 
   WICHTIG:
@@ -82,7 +83,7 @@ elif os.path.exists("style.loglevel.warning"):
 elif os.path.exists("style.loglevel.error"):
     DEBUGLEVEL = logging.ERROR
 else:
-    DEBUGLEVEL = logging.ERROR  # .ERROR or .DEBUG  or .INFO
+    DEBUGLEVEL = logging.DEBUG # .ERROR or .DEBUG  or .INFO
 
 logging.basicConfig(filename='style.log', level=DEBUGLEVEL)
 
@@ -144,7 +145,7 @@ def handle_div(e):
 
 def handle_div_and_span(e, doc):
     """
-     Handle DIV and SPAN Blocks in gerneral
+     Handle DIV and SPAN Blocks and (HTML-)Comments in gerneral
     """
 
     global dec
@@ -247,6 +248,22 @@ def handle_header(e, doc):
         return [pf.RawBlock("\\end{" + str(tag) + "}\n", frmt), e]
 
 
+def handle_comments(e, doc):
+    logging.debug("handle_comments:")
+    if isinstance(e, pf.RawBlock):
+        if e.text.startswith('<!--') and e.text.endswith('-->'):
+            if doc.format == "latex":
+                logging.debug("handle_comments old:"+e.text)
+                e.format = "latex"
+                e.text = "% "+e.text[4:-3]+ "\n"
+                logging.debug("handle_comments new:"+e.text)
+                return e
+
+#            if doc.format == "beamer":
+#                logging.debug("handle_comments remove comment:"+e.text)
+#                return []
+
+
 def action(e, doc):
     """Main action function for panflute.
     """
@@ -263,6 +280,9 @@ def action(e, doc):
     if isinstance(e, (pf.Div, pf.Span)):
         return handle_div_and_span(e, doc)
 
+    if isinstance(e, pf.RawBlock):
+        return handle_comments(e, doc)
+
     if isinstance(e, pf.Header):
         if e.level > slidelevel:
             return handle_header_block_level(e, doc)
@@ -275,8 +295,13 @@ def _prepare(doc):
     :return: current document
     """
     global slidelevel
+    logging.debug("----------------- pre begin -------------------------")
     logging.debug(doc.get_metadata("output", "<-NIX->"))
-    slidelevel = int(doc.get_metadata('output.beamer_presentation.slide_level', 2))
+    logging.debug(doc.get_metadata("output.pdf-document", "<-NIX->"))
+    logging.debug(doc.get_metadata("output.beamer_presentation.slide_level", "<-NIX->"))
+    slidelevel = int(doc.get_metadata('output.beamer_presentation.slide_level', 3))
+    logging.debug("Slidelevel found:" + str(slidelevel))
+    logging.debug("----------------- pre end ---------------------------")
 
 
 def _finalize(doc):
@@ -285,7 +310,12 @@ def _finalize(doc):
     :param doc: current document
     :return: current document
     """
-
+    def __add_header_includes(rawstr, frmt):
+        if not rawstr in doc.get_metadata("header-includes"):
+            doc.metadata[hdr_inc].append(
+                pf.MetaInlines(pf.RawInline(rawstr, frmt))
+            )
+            
     logging.debug("Finalize doc!")
     hdr_inc = "header-includes"
 
@@ -312,12 +342,9 @@ def _finalize(doc):
         frmt = "latex"
 
     if doc.format in ("tex", "latex", "beamer"):
-        doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\usepackage{xspace}", frmt))
-        )
-        doc.metadata[hdr_inc].append(
-            pf.MetaInlines(pf.RawInline("\\include{header.tex}", frmt))
-        )
+        __add_header_includes("\\usepackage[german=quotes]{csquotes}", frmt)
+        __add_header_includes("\\usepackage{xspace}", frmt)
+        __add_header_includes("\\InputIfFileExists{header.tex}{\\relax}{\\relax}", frmt)
 
 
 def main(doc=None):

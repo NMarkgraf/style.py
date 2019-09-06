@@ -88,11 +88,14 @@
 \usepackage{xcolor}
 \newcommand{\cemph}{\color{green}}
 \newcommand{\cstrong}{\color{red}}
+\usepackage[german=quotes]{csquotes}
 \usepackage{xspace}
-\include{header.tex}
+\InputIfFileExists{header.tex}{\relax}{\relax}
 
 \begin{document}
 \maketitle
+
+%  Hier beginnt der Test! 
 
 \hypertarget{test}{%
 \section{Test}\label{test}}
