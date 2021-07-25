@@ -196,14 +196,14 @@ class LaTeXDecorator(Decorator):
             if width == "fill":
                 self.add_pre("\n\\vfill\n")
             else:
-                self.add_pre("\n\\vspace*{"+width+"}\n")
+                self.add_pre(f"\n\\vspace*{{{width}}}\n")
 
         if 'bottom' in attrib:
             width = attrib["bottom"]
             if width == "fill":
                 self.add_pre("\n\\vfill\n")
             else:
-                self.add_post("\n\\vspace*{"+width+"}\n")
+                self.add_post(f"\n\\vspace*{{{width}}}\n")
 
     def handle_div(self, elem):
         """Handle DIV Blocks in LaTeX Context.

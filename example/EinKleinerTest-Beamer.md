@@ -10,6 +10,8 @@ header-includes:
   - "`\\newcommand{\\cstrong}{\\color{red}}`{=latex}"
 output:
   beamer_presentation:
+    template: NULL
+    latex_engine: pdflate
     keep_tex: yes
     md_extensions: +raw_tex+header_attributes+fenced_divs+bracketed_spans
     pandoc_args:
@@ -146,5 +148,78 @@ Das ist so. Das bleibt so.
 ### $<$ $>$ $\leq$ {.example}
 
 Ein etwas anderer Test!
+
+## Ein paar der alten "moreblock" Sachen mit native DIVs(I/II)
+
+:::
+
+### von Düsterloh {.theorem}
+
+Das Niveau hat keine untere Schranke.
+
+:::
+
+Blubber!
+
+:::
+
+### des Satzes von Düsterloh {.proof}
+Donald Trump.
+
+:::
+
+:::
+
+### Notwendig dafür ist {.remark}
+Das wir "moreblock.tex" einbinden!
+
+:::
+
+### {.example}
+Das Beispiel sehen wir hier!
+
+## Ein paar der alten "moreblock" Sachen (II/II)
+
+<div class="test">
+### {.definition}
+Es ist, also muss es!
+</div>
+
+Blubber!
+
+<div class="test">
+
+### {.exercise}
+Eine Übung zur rechten Zeit, und wir wissen was übrig bleibt.
+
+
+</div>
+
+Blubber!
+
+### {.fact}
+Das ist so. Das bleibt so.
+
+### $<$ $>$ $\leq$ {.example}
+
+Ein etwas anderer Test!
+
+
+## Blöcke mit top / bottom spacing!
+
+Dies ist eine Zeile im normalen Fluss!
+
+::: {.spaceing top=1cm}
+Nach oben hat dieser Block einen Abstand von 1cm!
+:::
+
+Hier geht es normal weiter.
+
+::: {.spaceing top=0.5cm bottom=1cm}
+Nach oben 0.5 cm nach unten 1 cm Abstand!
+:::
+
+Und noch einmal normaler Text!
+
 
 ## Ende!
