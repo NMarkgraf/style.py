@@ -8,6 +8,7 @@ header-includes:
   - "\\include{moreblocks}"
   - "`\\newcommand{\\cemph}{\\color{green}}`{=latex}"
   - "`\\newcommand{\\cstrong}{\\color{red}}`{=latex}"
+  - "`\\usepackage{setspace}`{=latex}"
 output:
   beamer_presentation:
     template: NULL
@@ -220,6 +221,35 @@ Nach oben 0.5 cm nach unten 1 cm Abstand!
 :::
 
 Und noch einmal normaler Text!
+
+## Streching 1/2
+
+::: {streching=1}
+Das ist mit **streching=1** gestetzt!
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+:::
+
+::: {streching=1.25}
+Das ist mit **streching=1.25** gestetzt!
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+:::
+
+::: {streching=1.5}
+Das ist mit **streching=1.5** gestetzt!
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+:::
+
+## Streching 2/2
+
+::: {streching=1.75}
+Das ist mit **streching=1.75** gestetzt!
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+:::
+
+::: {streching=2.0}
+Das ist mit **streching=2.0** gestetzt!
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+:::
 
 
 ## Ende!

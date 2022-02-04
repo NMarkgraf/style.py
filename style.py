@@ -7,7 +7,7 @@
   
   A Quick-Typographie-Pandoc-Panflute-Filter.
 
-  (C)opyleft in 2018/19 by Norman Markgraf (nmarkgraf@hotmail.com)
+  (C)opyleft in 2018-2022 by Norman Markgraf (nmarkgraf@hotmail.com)
 
   Release:
   ========
@@ -30,6 +30,8 @@
   0.6.3 - 30.07.2019 (nm) - .spacing mit top und bottom eingebaut.
   0.6.4 - 06.07.2019 (nm) - Umgang mit "HTML-Kommentaren" verbessern.
   0.6.5 - 25.07.2021 (nm) - .spacing etwas verbessert und Beispiel eingefügt.
+  0.6.6 - 04.02.2022 (nm) - Attribut 'streching' wird ausgewertet. Dafür ist
+                            ein "\usepackge{setspace}" nötig!
 
 
   WICHTIG:
