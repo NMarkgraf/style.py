@@ -31,7 +31,7 @@
   0.6.4 - 06.07.2019 (nm) - Umgang mit "HTML-Kommentaren" verbessern.
   0.6.5 - 25.07.2021 (nm) - .spacing etwas verbessert und Beispiel eingefügt.
   0.6.6 - 04.02.2022 (nm) - Attribut 'streching' wird ausgewertet. Dafür ist
-                            ein "\usepackge{setspace}" nötig!
+                            ein "usepackge{setspace}" nötig!
 
 
   WICHTIG:
